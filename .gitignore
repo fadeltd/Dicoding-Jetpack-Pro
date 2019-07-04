@@ -84,6 +84,8 @@ obj/
 .idea/dynamic.xml
 .idea/uiDesigner.xml
 .idea/assetWizardSettings.xml
+.idea/sonarIssues.xml
+.idea/sonarlint/
 
 # OS-specific files
 .DS_Store
