@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:paddingTop="4dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="4dp">
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true">
+
+        <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp">
+
+            <FrameLayout
+                    android:id="@+id/movie_poster_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#ccc">
+
+                <ImageView
+                        android:id="@+id/movie_poster"
+                        android:layout_width="100dp"
+                        android:layout_height="160dp"
+                        app:srcCompat="@drawable/img_default"/>
+
+            </FrameLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toEndOf="@+id/movie_poster_layout"
+                    android:layout_toRightOf="@+id/movie_poster_layout"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:id="@+id/movie_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        tools:text="Movie Title"/>
+
+                <TextView
+                        android:id="@+id/movie_release_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        tools:text="Saturday, 08-11-2018"/>
+
+                <TextView
+                        android:id="@+id/movie_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:maxLines="3"
+                        tools:text="Overview"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</FrameLayout>
