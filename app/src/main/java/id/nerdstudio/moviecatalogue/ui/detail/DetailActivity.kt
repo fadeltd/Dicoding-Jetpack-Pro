@@ -6,11 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import id.nerdstudio.moviecatalogue.R
 import id.nerdstudio.moviecatalogue.data.Item
+import id.nerdstudio.moviecatalogue.data.Type
 import id.nerdstudio.moviecatalogue.util.parseDate
 import id.nerdstudio.moviecatalogue.util.setImagePoster
 import id.nerdstudio.moviecatalogue.util.toFormattedDate
+import id.nerdstudio.moviecatalogue.viewmodel.ViewModelFactory
+import id.nerdstudio.moviecatalogue.util.observe
 import kotlinx.android.synthetic.main.activity_detail.*
-import id.nerdstudio.moviecatalogue.data.Type
 
 class DetailActivity : AppCompatActivity() {
 
@@ -20,14 +22,17 @@ class DetailActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val viewModel = ViewModelProviders.of(this).get(DetailViewModel::class.java)
+        val factory = ViewModelFactory.getInstance(application)
+        val viewModel = ViewModelProviders
+            .of(this, factory)
+            .get(DetailViewModel::class.java)
 
         intent.extras?.let {
             val id = it.getLong(ARG_ID)
             val type = it.getInt(ARG_TYPE)
             viewModel.id = id
             viewModel.type = Type.values()[type]
-            viewModel.getItem()?.let { item ->
+            viewModel.getItem()?.observe(this) { item ->
                 populateItem(item)
             }
         }

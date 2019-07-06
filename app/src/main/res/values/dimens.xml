@@ -1,0 +1,10 @@
+<resources>
+    <dimen name="activity_padding">16dp</dimen>
+    <dimen name="activity_padding_horizontal">16dp</dimen>
+    <dimen name="placeholder_image">50dp</dimen>
+    <dimen name="placeholder_text_height">8dp</dimen>
+
+    <dimen name="title">15dp</dimen>
+    <dimen name="description">15dp</dimen>
+    <dimen name="release_date">12dp</dimen>
+</resources>

@@ -5,14 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import id.nerdstudio.moviecatalogue.R
+import id.nerdstudio.moviecatalogue.data.Item
 import id.nerdstudio.moviecatalogue.data.Type
 import id.nerdstudio.moviecatalogue.ui.movie.MovieViewModel
 import id.nerdstudio.moviecatalogue.ui.tv.TvShowViewModel
+import id.nerdstudio.moviecatalogue.viewmodel.ViewModelFactory
+import id.nerdstudio.moviecatalogue.util.observe
 import kotlinx.android.synthetic.main.fragment_list.*
-import androidx.lifecycle.ViewModelProviders
 
 class ListFragment : Fragment() {
     private var type: Type = Type.MOVIE
@@ -35,24 +38,54 @@ class ListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        if (activity != null) {
-            val viewModel = ViewModelProviders.of(this).get(
-                if (type == Type.MOVIE) MovieViewModel::class.java
-                else TvShowViewModel::class.java
-            )
-            val list = when (viewModel) {
-                is MovieViewModel -> viewModel.getMovies()
-                is TvShowViewModel -> viewModel.getTvShows()
-                else -> listOf()
+        activity?.let {
+            val factory = ViewModelFactory.getInstance(it.application)
+            val viewModel = ViewModelProviders.of(this, factory)
+                .get(
+                    if (type == Type.MOVIE) MovieViewModel::class.java
+                    else TvShowViewModel::class.java
+                )
+
+            when (viewModel) {
+                is MovieViewModel -> viewModel.getMovies().observe(this, ::notifyData)
+                is TvShowViewModel -> viewModel.getTvShows().observe(this, ::notifyData)
             }
 
+            val adapter = ListAdapter(it, listOf(), type)
             val recyclerView = recycler_view
-            context?.run {
-                recyclerView.adapter = ListAdapter(this, list, type)
-                recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-                recyclerView.setHasFixedSize(true)
-            }
+            recyclerView.adapter = adapter
+            recyclerView.layoutManager = LinearLayoutManager(it, RecyclerView.VERTICAL, false)
+            recyclerView.setHasFixedSize(true)
         }
+    }
+
+    private fun notifyData(items: List<Item>) {
+        hideLoading()
+        val adapter = (recycler_view.adapter as ListAdapter)
+        adapter.setData(items)
+        adapter.notifyDataSetChanged()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        shimmer_loading.startShimmerAnimation()
+    }
+
+    override fun onPause() {
+        shimmer_loading.stopShimmerAnimation()
+        super.onPause()
+    }
+
+    private fun showLoading() {
+        recycler_view.visibility = View.GONE
+        shimmer_loading.startShimmerAnimation()
+        shimmer_loading.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        recycler_view.visibility = View.VISIBLE
+        shimmer_loading.stopShimmerAnimation()
+        shimmer_loading.visibility = View.GONE
     }
 
     companion object {

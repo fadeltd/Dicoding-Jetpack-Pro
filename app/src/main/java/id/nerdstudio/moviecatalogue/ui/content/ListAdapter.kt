@@ -18,6 +18,10 @@ import id.nerdstudio.moviecatalogue.data.Type
 class ListAdapter(private val context: Context, private var data: List<Item>, private val type: Type) :
     RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
+    fun setData(mData: List<Item>){
+        data = mData
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false))
     }

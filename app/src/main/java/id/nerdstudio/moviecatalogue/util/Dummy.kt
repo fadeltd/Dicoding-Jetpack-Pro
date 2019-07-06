@@ -246,6 +246,7 @@ object Dummy {
                 id = 79501,
                 title = "Doom Patrol",
                 posterPath = "tv_doom_patrol",
+                voteAverage = 6.1F,
                 releaseDate = "2019-02-15",
                 overview = "The Doom Patrol’s members each suffered horrible accidents that gave them superhuman abilities — but also left them scarred and disfigured. Traumatized and downtrodden, the team found purpose through The Chief, who brought them together to investigate the weirdest phenomena in existence — and to protect Earth from what they find."
             ),
@@ -258,6 +259,7 @@ object Dummy {
                 overview = "This thriller and coming-of-age drama follows the journey of an extraordinary young girl as she evades the relentless pursuit of an off-book CIA agent and tries to unearth the truth behind who she is. Based on the 2011 Joe Wright film."
             ),
             Item(
+                id = 62127,
                 title = "Marvel's Iron Fist",
                 voteAverage = 6.06F,
                 posterPath = "tv_iron_fist",
