@@ -7,11 +7,11 @@ import androidx.lifecycle.ViewModelProviders
 import id.nerdstudio.moviecatalogue.R
 import id.nerdstudio.moviecatalogue.data.Item
 import id.nerdstudio.moviecatalogue.data.Type
+import id.nerdstudio.moviecatalogue.util.observe
 import id.nerdstudio.moviecatalogue.util.parseDate
 import id.nerdstudio.moviecatalogue.util.setImagePoster
 import id.nerdstudio.moviecatalogue.util.toFormattedDate
 import id.nerdstudio.moviecatalogue.viewmodel.ViewModelFactory
-import id.nerdstudio.moviecatalogue.util.observe
 import kotlinx.android.synthetic.main.activity_detail.*
 
 class DetailActivity : AppCompatActivity() {

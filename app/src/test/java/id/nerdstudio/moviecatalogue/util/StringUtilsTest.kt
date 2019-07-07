@@ -1,8 +1,8 @@
 package id.nerdstudio.moviecatalogue.util
 
 import org.joda.time.DateTime
-import org.junit.Test
 import org.junit.Assert.assertEquals
+import org.junit.Test
 
 class StringUtilsTest {
 

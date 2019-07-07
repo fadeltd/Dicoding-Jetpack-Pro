@@ -13,8 +13,8 @@ import id.nerdstudio.moviecatalogue.data.Item
 import id.nerdstudio.moviecatalogue.data.Type
 import id.nerdstudio.moviecatalogue.ui.movie.MovieViewModel
 import id.nerdstudio.moviecatalogue.ui.tv.TvShowViewModel
-import id.nerdstudio.moviecatalogue.viewmodel.ViewModelFactory
 import id.nerdstudio.moviecatalogue.util.observe
+import id.nerdstudio.moviecatalogue.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_list.*
 
 class ListFragment : Fragment() {

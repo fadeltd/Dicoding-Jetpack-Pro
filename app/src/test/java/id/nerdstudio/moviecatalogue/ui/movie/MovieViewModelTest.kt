@@ -1,17 +1,33 @@
 package id.nerdstudio.moviecatalogue.ui.movie
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import id.nerdstudio.moviecatalogue.data.Item
+import id.nerdstudio.moviecatalogue.data.source.ItemRepository
+import id.nerdstudio.moviecatalogue.util.Dummy
 import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-
-import org.junit.Assert.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 
 class MovieViewModelTest {
+    @Rule
+    @JvmField
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
     private lateinit var viewModel: MovieViewModel
+    private val itemRepository = mock(ItemRepository::class.java)
 
     @Before
     fun setUp() {
-        viewModel = MovieViewModel()
+        viewModel = MovieViewModel(itemRepository)
     }
 
     @After
@@ -20,8 +36,17 @@ class MovieViewModelTest {
 
     @Test
     fun getMovies() {
-        val list = viewModel.getMovies()
-        assertNotNull(list)
-        assertEquals(19, list.size)
+        val mockMovies = MutableLiveData<List<Item>>()
+        mockMovies.value = Dummy.dummyMovies()
+
+        `when`(itemRepository.getAllMovies()).thenReturn(mockMovies)
+
+        val observer: Observer<List<Item>> = mock()
+        viewModel.getMovies().observeForever(observer)
+
+        assertNotNull(mockMovies.value)
+        assertEquals(19, mockMovies.value?.size)
+
+        verify(itemRepository).getAllMovies()
     }
 }

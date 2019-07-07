@@ -1,18 +1,18 @@
 package id.nerdstudio.moviecatalogue.ui.content
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import id.nerdstudio.moviecatalogue.R
 import id.nerdstudio.moviecatalogue.data.Item
+import id.nerdstudio.moviecatalogue.data.Type
+import id.nerdstudio.moviecatalogue.ui.detail.DetailActivity
 import id.nerdstudio.moviecatalogue.util.setImagePoster
 import id.nerdstudio.moviecatalogue.util.toFormattedDate
 import kotlinx.android.synthetic.main.item_movie.view.*
-import id.nerdstudio.moviecatalogue.ui.detail.DetailActivity
-import android.content.Intent
-import id.nerdstudio.moviecatalogue.data.Type
 
 
 class ListAdapter(private val context: Context, private var data: List<Item>, private val type: Type) :

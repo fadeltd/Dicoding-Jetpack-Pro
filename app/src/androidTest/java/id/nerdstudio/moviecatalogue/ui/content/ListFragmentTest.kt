@@ -2,6 +2,7 @@ package id.nerdstudio.moviecatalogue.ui.content
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
@@ -10,8 +11,8 @@ import androidx.test.rule.ActivityTestRule
 import id.nerdstudio.moviecatalogue.R
 import id.nerdstudio.moviecatalogue.data.Type
 import id.nerdstudio.moviecatalogue.testing.SingleFragmentActivity
+import id.nerdstudio.moviecatalogue.util.EspressoIdlingResource
 import id.nerdstudio.moviecatalogue.util.RecyclerViewItemCountAssertion
-import kotlinx.android.synthetic.main.fragment_list.*
 import org.hamcrest.Matchers
 import org.junit.After
 import org.junit.Before
@@ -28,14 +29,14 @@ class ListFragmentTest {
 
     @Before
     fun setUp() {
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.espressoIdlingResource)
         activity = activityRule.activity
         assertThat(activity, Matchers.notNullValue())
-
-
     }
 
     @After
     fun tearDown() {
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.espressoIdlingResource)
     }
 
     @Test

@@ -10,9 +10,9 @@ interface ItemDataSource {
 
     fun getAllTvShows(): LiveData<List<Item>>
 
-    fun getFavoriteMovies(): LiveData<List<Item>>
-
-    fun getFavoriteTvShows(): LiveData<List<Item>>
+//    fun getFavoriteMovies(): LiveData<List<Item>>
+//
+//    fun getFavoriteTvShows(): LiveData<List<Item>>
 
     fun getContent(id: Long, type: Type): LiveData<Item>
 }

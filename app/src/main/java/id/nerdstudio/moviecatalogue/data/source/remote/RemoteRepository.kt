@@ -10,29 +10,29 @@ import id.nerdstudio.moviecatalogue.util.JsonUtils
 class RemoteRepository private constructor(private val jsonUtils: JsonUtils) {
     fun getAllItems(
         type: Type,
-        onReceived: (itemResponses: List<Item>) -> Unit,
-        onDataNotAvailable: (() -> Unit)? = null
+        onReceived: ((itemResponses: List<Item>) -> Unit)? = null //,
+//        onDataNotAvailable: (() -> Unit)? = null
     ) {
         EspressoIdlingResource.increment()
         val handler = Handler()
         handler.postDelayed({
-            onReceived(jsonUtils.loadItems(type))
+            onReceived?.invoke(jsonUtils.loadItems(type))
             EspressoIdlingResource.decrement()
         }, SERVICE_LATENCY_IN_MILLIS)
     }
 
-    fun getFavoriteItems(
-        type: Type,
-        onReceived: (itemResponses: List<Item>) -> Unit,
-        onDataNotAvailable: (() -> Unit)? = null
-    ) {
-        EspressoIdlingResource.increment()
-        val handler = Handler()
-        handler.postDelayed({
-            onReceived(jsonUtils.loadItems(type))
-            EspressoIdlingResource.decrement()
-        }, SERVICE_LATENCY_IN_MILLIS)
-    }
+//    fun getFavoriteItems(
+//        type: Type,
+//        onReceived: (itemResponses: List<Item>) -> Unit,
+//        onDataNotAvailable: (() -> Unit)? = null
+//    ) {
+//        EspressoIdlingResource.increment()
+//        val handler = Handler()
+//        handler.postDelayed({
+//            onReceived(jsonUtils.loadItems(type))
+//            EspressoIdlingResource.decrement()
+//        }, SERVICE_LATENCY_IN_MILLIS)
+//    }
 
     companion object {
         private const val SERVICE_LATENCY_IN_MILLIS: Long = 2000

@@ -1,22 +1,28 @@
 package id.nerdstudio.moviecatalogue.util
 
 import android.app.Application
-import com.google.gson.JsonElement
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import id.nerdstudio.moviecatalogue.data.Item
 import id.nerdstudio.moviecatalogue.data.Type
 import java.io.IOException
 
+fun JsonObject.safe(key: String): Boolean {
+    return this.has(key) && !this[key].isJsonNull
+}
+
+fun JsonObject.safeLong(key: String): Long {
+    return if (this.safe(key)) this[key].asLong else 0L
+}
+
+fun JsonObject.safeFloat(key: String): Float {
+    return if (this.safe(key)) this[key].asFloat else 0F
+}
+
+inline fun <reified T> JsonObject.toObject(): T = Gson().fromJson(this, T::class.java)
+
 class JsonUtils(private val application: Application) {
-
-    private fun JsonObject.safeLong(key: String): Long {
-        return if(this.has(key) && !this.isJsonNull) this[key].asLong else 0L
-    }
-
-    private fun JsonObject.safeFloat(key: String): Float {
-        return if(this.has(key) && !this.isJsonNull) this[key].asFloat else 0F
-    }
 
     private fun readFile(fileName: String): String? {
         return try {

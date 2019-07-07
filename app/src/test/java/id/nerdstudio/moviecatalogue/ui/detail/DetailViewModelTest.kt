@@ -1,25 +1,39 @@
 package id.nerdstudio.moviecatalogue.ui.detail
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import com.nhaarman.mockitokotlin2.mock
 import id.nerdstudio.moviecatalogue.data.Item
 import id.nerdstudio.moviecatalogue.data.Type
+import id.nerdstudio.moviecatalogue.data.source.ItemRepository
 import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-
-import org.junit.Assert.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 
 class DetailViewModelTest {
+    @Rule
+    @JvmField
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    private val itemRepository = mock(ItemRepository::class.java)
+
     private lateinit var viewModelMovie: DetailViewModel
     private lateinit var typeMovie: Type
     private lateinit var mockMovie: Item
 
-    private lateinit var viewModelTv: DetailViewModel
-    private lateinit var typeTv: Type
-    private lateinit var mockTv: Item
+    private lateinit var viewModelTvShow: DetailViewModel
+    private lateinit var typeTvShow: Type
+    private lateinit var mockTvShow: Item
 
     @Before
     fun setUp() {
-        viewModelMovie = DetailViewModel()
+        viewModelMovie = DetailViewModel(itemRepository)
         typeMovie = Type.MOVIE
         mockMovie = Item(
             id = 332562,
@@ -30,9 +44,9 @@ class DetailViewModelTest {
             releaseDate = "October 3, 2018"
         )
 
-        viewModelTv = DetailViewModel()
-        typeTv = Type.TV_SHOW
-        mockTv = Item(
+        viewModelTvShow = DetailViewModel(itemRepository)
+        typeTvShow = Type.TV_SHOW
+        mockTvShow = Item(
             id = 1402,
             title = "The Walking Dead",
             voteAverage = 7.26F,
@@ -48,9 +62,19 @@ class DetailViewModelTest {
 
     @Test
     fun getItemMovie() {
-        viewModelMovie.id = mockMovie.id
+        val movieData = MutableLiveData<Item>()
+        movieData.value = mockMovie
+
+        val id = mockMovie.id ?: 0L
+        viewModelMovie.id = id
         viewModelMovie.type = typeMovie
-        val movie = viewModelMovie.getItem()
+
+        `when`(itemRepository.getContent(id, typeMovie)).thenReturn(movieData)
+
+        val observer: Observer<Item> = mock()
+        viewModelMovie.getItem()?.observeForever(observer)
+
+        val movie = viewModelMovie.getItem()?.value
         assertNotNull(movie)
         assertEquals(mockMovie.id, movie?.id)
         assertEquals(mockMovie.voteAverage, movie?.voteAverage)
@@ -62,15 +86,25 @@ class DetailViewModelTest {
 
     @Test
     fun getItemTvShow() {
-        viewModelTv.id = mockTv.id
-        viewModelTv.type = typeTv
-        val tvShow = viewModelTv.getItem()
+        val tvShowData = MutableLiveData<Item>()
+        tvShowData.value = mockTvShow
+
+        val id = mockTvShow.id ?: 0L
+        viewModelTvShow.id = id
+        viewModelTvShow.type = typeTvShow
+
+        `when`(itemRepository.getContent(id, typeTvShow)).thenReturn(tvShowData)
+
+        val observer: Observer<Item> = mock()
+        viewModelTvShow.getItem()?.observeForever(observer)
+
+        val tvShow = viewModelTvShow.getItem()?.value
         assertNotNull(tvShow)
-        assertEquals(mockTv.id, tvShow?.id)
-        assertEquals(mockTv.voteAverage, tvShow?.voteAverage)
-        assertEquals(mockTv.title, tvShow?.title)
-        assertEquals(mockTv.posterPath, tvShow?.posterPath)
-        assertEquals(mockTv.overview, tvShow?.overview)
-        assertEquals(mockTv.releaseDate, tvShow?.releaseDate)
+        assertEquals(mockTvShow.id, tvShow?.id)
+        assertEquals(mockTvShow.voteAverage, tvShow?.voteAverage)
+        assertEquals(mockTvShow.title, tvShow?.title)
+        assertEquals(mockTvShow.posterPath, tvShow?.posterPath)
+        assertEquals(mockTvShow.overview, tvShow?.overview)
+        assertEquals(mockTvShow.releaseDate, tvShow?.releaseDate)
     }
 }

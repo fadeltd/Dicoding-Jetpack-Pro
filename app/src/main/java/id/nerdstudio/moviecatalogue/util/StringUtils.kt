@@ -2,7 +2,6 @@ package id.nerdstudio.moviecatalogue.util
 
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
-import java.lang.IllegalArgumentException
 import java.util.*
 
 fun String.parseDate(): DateTime {

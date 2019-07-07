@@ -2,9 +2,9 @@ package id.nerdstudio.moviecatalogue.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
-import id.nerdstudio.moviecatalogue.di.Injection
 import androidx.lifecycle.ViewModelProvider
 import id.nerdstudio.moviecatalogue.data.source.ItemRepository
+import id.nerdstudio.moviecatalogue.di.Injection
 import id.nerdstudio.moviecatalogue.ui.detail.DetailViewModel
 import id.nerdstudio.moviecatalogue.ui.movie.MovieViewModel
 import id.nerdstudio.moviecatalogue.ui.tv.TvShowViewModel

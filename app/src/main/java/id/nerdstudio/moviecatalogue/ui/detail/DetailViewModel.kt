@@ -5,8 +5,6 @@ import androidx.lifecycle.ViewModel
 import id.nerdstudio.moviecatalogue.data.Item
 import id.nerdstudio.moviecatalogue.data.Type
 import id.nerdstudio.moviecatalogue.data.source.ItemRepository
-import id.nerdstudio.moviecatalogue.util.Dummy.dummyMovies
-import id.nerdstudio.moviecatalogue.util.Dummy.dummyTvShows
 
 class DetailViewModel(private val itemRepository: ItemRepository) : ViewModel() {
     var id: Long = 0

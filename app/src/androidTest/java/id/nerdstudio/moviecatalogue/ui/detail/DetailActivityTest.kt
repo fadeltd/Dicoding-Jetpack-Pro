@@ -1,24 +1,22 @@
 package id.nerdstudio.moviecatalogue.ui.detail
 
 import android.content.Intent
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
-
-import org.junit.Rule
-import org.junit.Test
-
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withParent
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import id.nerdstudio.moviecatalogue.R
 import id.nerdstudio.moviecatalogue.data.Type
-
 import id.nerdstudio.moviecatalogue.util.Dummy
+import id.nerdstudio.moviecatalogue.util.EspressoIdlingResource
 import id.nerdstudio.moviecatalogue.util.parseDate
 import id.nerdstudio.moviecatalogue.util.toFormattedDate
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 
 class DetailActivityTest {
     private val mockMovie = Dummy.dummyMovies()[1]
@@ -34,6 +32,16 @@ class DetailActivityTest {
                     .putExtra(DetailActivity.ARG_TYPE, Type.MOVIE)
             }
         }
+
+    @Before
+    fun setUp() {
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.espressoIdlingResource)
+    }
+
+    @After
+    fun tearDown() {
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.espressoIdlingResource)
+    }
 
     @Test
     fun loadMovieDetail() {
