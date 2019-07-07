@@ -17,7 +17,6 @@ class JsonUtilsTest {
     @Before
     fun setup() {
         parser = JsonParser()
-
     }
 
     @Test

@@ -10,6 +10,7 @@
 
     <color name="colorBackgroundLight">#eee</color>
     <color name="colorPlaceholderBackground">#ccc</color>
+    <color name="colorPlaceholderBackgroundDark">#999</color>
     <color name="colorTitle">#0c0c0c</color>
     <color name="colorDescription">#888</color>
     <color name="colorDate">#6b6b6b</color>

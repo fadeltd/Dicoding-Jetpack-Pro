@@ -12,7 +12,12 @@ fun String.parseDate(): DateTime {
     }
 }
 
-fun String?.toFormattedDate(): String {
+fun String?.toFormattedDayDate(): String {
     return if (this.isNullOrEmpty()) ""
     else this.parseDate().toString("E, dd MMM yyyy", Locale.US)
+}
+
+fun String?.toFormattedDate(): String {
+    return if (this.isNullOrEmpty()) ""
+    else this.parseDate().toString("MMMM, dd yyyy", Locale.US)
 }
