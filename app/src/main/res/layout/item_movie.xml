@@ -3,66 +3,86 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="6dp"
         android:paddingEnd="6dp">
 
     <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="8dp"
             app:cardElevation="4dp"
             app:cardUseCompatPadding="true">
 
-        <RelativeLayout
-                android:layout_width="wrap_content"
+        <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp">
-
-            <FrameLayout
-                    android:id="@+id/movie_poster_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimaryDark">
-
-                <ImageView
-                        android:id="@+id/movie_poster"
-                        android:layout_width="96dp"
-                        android:layout_height="96dp"
-                        android:scaleType="centerCrop"
-                        app:srcCompat="@drawable/img_default"/>
-
-            </FrameLayout>
+                android:orientation="vertical">
 
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_toEndOf="@+id/movie_poster_layout"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:padding="8dp">
 
-                <TextView
-                        android:id="@+id/movie_title"
+                <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/loading_movie_poster"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/colorAccentText"
-                        tools:text="Movie Title"/>
+                        android:visibility="gone"
+                        app:duration="200">
 
-                <TextView
-                        android:id="@+id/movie_release_date"
+                    <View
+                            android:layout_width="96dp"
+                            android:layout_height="96dp"
+                            android:background="@color/colorPlaceholderBackground"/>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+                <FrameLayout
+                        android:id="@+id/movie_poster_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="@color/colorDate"
-                        android:layout_marginTop="6dp"
-                        tools:text="Sat, 08-11-2018"/>
+                        android:background="@color/colorPrimaryDark">
+
+                    <ImageView
+                            android:id="@+id/movie_poster"
+                            android:layout_width="96dp"
+                            android:layout_height="96dp"
+                            android:scaleType="centerCrop"
+                            app:srcCompat="@drawable/img_default"/>
+
+                </FrameLayout>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:orientation="vertical">
+
+                    <TextView
+                            android:id="@+id/movie_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorAccentText"
+                            tools:text="Movie Title"/>
+
+                    <TextView
+                            android:id="@+id/movie_release_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/colorDate"
+                            android:layout_marginTop="6dp"
+                            tools:text="November, 08 2018"/>
+                </LinearLayout>
+
             </LinearLayout>
 
             <TextView
-                    android:layout_below="@+id/movie_poster_layout"
                     android:id="@+id/movie_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -70,9 +90,10 @@
                     android:textSize="12sp"
                     android:textColor="@color/colorDescription"
                     android:maxLines="3"
+                    android:padding="4dp"
                     tools:text="Overview"/>
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 

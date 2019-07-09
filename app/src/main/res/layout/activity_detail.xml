@@ -141,6 +141,7 @@
                     />
 
                     <TextView
+                            android:visibility="gone"
                             android:layout_marginTop="2dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -151,6 +152,7 @@
                     />
 
                     <TextView
+                            android:visibility="gone"
                             android:layout_marginTop="2dp"
                             android:id="@+id/movie_language"
                             android:layout_width="wrap_content"
@@ -161,6 +163,7 @@
                     />
 
                     <TextView
+                            android:visibility="gone"
                             android:layout_marginTop="2dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -171,6 +174,7 @@
                     />
 
                     <TextView
+                            android:visibility="gone"
                             android:layout_marginTop="2dp"
                             android:id="@+id/movie_duration"
                             android:layout_width="wrap_content"
@@ -181,6 +185,7 @@
                     />
 
                     <TextView
+                            android:visibility="gone"
                             android:layout_marginTop="2dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -191,6 +196,7 @@
                     />
 
                     <TextView
+                            android:visibility="gone"
                             android:layout_marginTop="2dp"
                             android:id="@+id/movie_budget"
                             android:layout_width="wrap_content"
@@ -201,6 +207,7 @@
                     />
 
                     <TextView
+                            android:visibility="gone"
                             android:layout_marginTop="2dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -211,6 +218,7 @@
                     />
 
                     <TextView
+                            android:visibility="gone"
                             android:layout_marginTop="2dp"
                             android:id="@+id/movie_revenue"
                             android:layout_width="wrap_content"
@@ -225,6 +233,7 @@
             </LinearLayout>
 
             <FrameLayout
+                    android:visibility="gone"
                     android:id="@+id/loading_cast_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -260,6 +269,7 @@
             </LinearLayout>
 
             <FrameLayout
+                    android:visibility="gone"
                     android:id="@+id/loading_genre_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -294,6 +304,7 @@
             </LinearLayout>
 
             <FrameLayout
+                    android:visibility="gone"
                     android:id="@+id/loading_similar_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -325,6 +336,7 @@
                         android:layout_height="wrap_content">
 
                 </androidx.recyclerview.widget.RecyclerView>
+
             </LinearLayout>
 
         </LinearLayout>

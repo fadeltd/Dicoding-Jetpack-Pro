@@ -10,7 +10,7 @@ class StringUtilsTest {
     fun parseDate() {
         assertEquals("2014-10-07".parseDate(), DateTime("2014-10-07"))
         assertEquals("2012-10-10".parseDate(), DateTime("2012-10-10"))
-        assertEquals("December 27, 2018".parseDate(), DateTime("2018-12-27"))
+        assertEquals("October 3, 2018".parseDate(), DateTime("2018-10-03"))
         assertEquals("December 6, 2018".parseDate(), DateTime("2018-12-06"))
         assertEquals("January 25, 2019".parseDate(), DateTime("2019-01-25"))
     }
@@ -26,8 +26,8 @@ class StringUtilsTest {
 
     @Test
     fun toFormattedDate() {
-        assertEquals("2014-10-07".toFormattedDayDate(), "October, 07 2014")
-        assertEquals("December 6, 2018".toFormattedDayDate(), "December, 06 2018")
-        assertEquals("January 25, 2019".toFormattedDayDate(), "January, 25 2019")
+        assertEquals("2014-10-07".toFormattedDate(), "October, 07 2014")
+        assertEquals("December 6, 2018".toFormattedDate(), "December, 06 2018")
+        assertEquals("January 25, 2019".toFormattedDate(), "January, 25 2019")
     }
 }

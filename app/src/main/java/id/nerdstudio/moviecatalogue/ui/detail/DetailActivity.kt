@@ -5,16 +5,16 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.RecyclerView
 import com.facebook.shimmer.ShimmerFrameLayout
 import id.nerdstudio.moviecatalogue.R
+import id.nerdstudio.moviecatalogue.api.ApiLoader
 import id.nerdstudio.moviecatalogue.data.Item
 import id.nerdstudio.moviecatalogue.data.Type
 import id.nerdstudio.moviecatalogue.util.observe
 import id.nerdstudio.moviecatalogue.util.parseDate
 import id.nerdstudio.moviecatalogue.util.setImagePoster
 import id.nerdstudio.moviecatalogue.util.toFormattedDate
-import id.nerdstudio.moviecatalogue.viewmodel.ViewModelFactory
+import id.nerdstudio.moviecatalogue.data.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.shimmer_cast.*
 import kotlinx.android.synthetic.main.shimmer_genre.*
@@ -29,7 +29,7 @@ class DetailActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val factory = ViewModelFactory.getInstance(application)
+        val factory = ViewModelFactory.getInstance(ApiLoader(this), application)
         val viewModel = ViewModelProviders
             .of(this, factory)
             .get(DetailViewModel::class.java)

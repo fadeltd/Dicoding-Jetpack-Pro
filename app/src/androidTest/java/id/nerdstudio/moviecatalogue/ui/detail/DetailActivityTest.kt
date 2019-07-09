@@ -49,8 +49,8 @@ class DetailActivityTest {
         val mockReleaseDate = mockMovie.releaseDate.toFormattedDate()
         onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
         onView(withText(mockTitle)).check(matches(withParent(withId(R.id.toolbar))))
+        onView(withId(R.id.movie_title)).check(matches(withText(mockMovie.title)))
         onView(withId(R.id.movie_release_date)).check(matches(withText(mockReleaseDate)))
-        onView(withId(R.id.movie_rating)).check(matches(withText(mockMovie.voteAverage.toString())))
         onView(withId(R.id.movie_poster)).check(matches(isDisplayed()))
         onView(withId(R.id.movie_description)).check(matches(withText(mockMovie.overview)))
     }

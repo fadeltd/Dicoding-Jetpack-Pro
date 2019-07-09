@@ -4,8 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.*
 import id.nerdstudio.moviecatalogue.data.Item
 import id.nerdstudio.moviecatalogue.data.Type
-import id.nerdstudio.moviecatalogue.data.source.local.LocalRepository
 import id.nerdstudio.moviecatalogue.data.source.remote.RemoteRepository
+import id.nerdstudio.moviecatalogue.data.source.local.LocalRepository
 import id.nerdstudio.moviecatalogue.util.Dummy
 import id.nerdstudio.moviecatalogue.util.getData
 import org.junit.After
@@ -41,7 +41,7 @@ class ItemRepositoryTest {
     @Test
     fun getAllMovies() {
         val type = Type.MOVIE
-        whenever(remote.getAllItems(eq(type), any())).thenAnswer {
+        whenever(local.getAllItems(eq(type), any())).thenAnswer {
             val callback = it.getArgument<((movies: List<Item>) -> Unit)>(1)
             callback.invoke(movies)
         }
@@ -49,7 +49,7 @@ class ItemRepositoryTest {
         assertEquals(movies.size, result?.size)
 
         val onReceivedMock: (List<Item>) -> Unit = mock()
-        remote.getAllItems(type, onReceivedMock)
+        local.getAllItems(type, onReceivedMock)
         argumentCaptor<List<Item>>().apply {
             verify(onReceivedMock, times(1)).invoke(capture())
             assertEquals(movies, firstValue)
@@ -59,7 +59,7 @@ class ItemRepositoryTest {
     @Test
     fun getAllTvShows() {
         val type = Type.TV_SHOW
-        whenever(remote.getAllItems(eq(type), any())).thenAnswer {
+        whenever(local.getAllItems(eq(type), any())).thenAnswer {
             val callback = it.getArgument<((tvShows: List<Item>) -> Unit)>(1)
             callback.invoke(tvShows)
         }
@@ -67,7 +67,7 @@ class ItemRepositoryTest {
         assertEquals(tvShows.size, result?.size)
 
         val onReceivedMock: (List<Item>) -> Unit = mock()
-        remote.getAllItems(type, onReceivedMock)
+        local.getAllItems(type, onReceivedMock)
         argumentCaptor<List<Item>>().apply {
             verify(onReceivedMock, times(1)).invoke(capture())
             assertEquals(tvShows, firstValue)
@@ -79,7 +79,7 @@ class ItemRepositoryTest {
         val id = movieId ?: 0
         val type = Type.MOVIE
 
-        whenever(remote.getAllItems(eq(type), any())).thenAnswer {
+        whenever(local.getAllItems(eq(type), any())).thenAnswer {
             val callback = it.getArgument<((tvShows: List<Item>) -> Unit)>(1)
             callback.invoke(movies)
         }
@@ -93,7 +93,7 @@ class ItemRepositoryTest {
         val id = tvShowId ?: 0
         val type = Type.TV_SHOW
 
-        whenever(remote.getAllItems(eq(type), any())).thenAnswer {
+        whenever(local.getAllItems(eq(type), any())).thenAnswer {
             val callback = it.arguments[1]
             val completion = callback as ((tvShows: List<Item>?) -> Unit)
             completion.invoke(tvShows)

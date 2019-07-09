@@ -1,54 +1,59 @@
 package id.nerdstudio.moviecatalogue.api
 
 import android.content.Context
+import androidx.fragment.app.Fragment
 import com.google.gson.JsonObject
 import com.koushikdutta.ion.Ion
 import com.koushikdutta.ion.Response
-import id.nerdstudio.moviecatalogue.config.AppConfig.getCurrentMovies
-import id.nerdstudio.moviecatalogue.data.Item
-import id.nerdstudio.moviecatalogue.util.safe
-import id.nerdstudio.moviecatalogue.util.toObject
+import com.koushikdutta.ion.builder.Builders
+import com.koushikdutta.ion.builder.LoadBuilder
 
-fun apiLoader(
-    context: Context, url: String,
-    onComplete: (e: Exception?, reponse: Response<JsonObject>) -> Unit
-) {
-    Ion.with(context)
-        .load(url)
-        .asJsonObject()
-        .withResponse()
-        .setCallback { e, response ->
-            onComplete(e, response)
-        }
-}
+class ApiLoader {
+    private var context: Context? = null
+    private var fragment: Fragment? = null
+    private var builder: LoadBuilder<Builders.Any.B>
 
-fun loadMovies(
-    context: Context,
-    onComplete: (() -> Unit)? = null,
-    onSuccess: ((movies: List<Item>) -> Unit)? = null,
-    onFailed: ((message: String?) -> Unit)? = null
-) {
-    apiLoader(context, getCurrentMovies()) { e, response ->
-        onComplete?.invoke()
-        if (e != null) {
-            onFailed?.invoke(e.message)
-        } else {
-            val code = response.headers?.code()
-            if (code == 200) {
-                val result = response.result
-                var list = listOf<Item>()
-                if (result.safe("results")) {
-                    val movies = result["results"].asJsonArray
-                    for (i in 0 until movies.size()) {
-                        val movie = movies[i].asJsonObject.toObject<Item>()
-                        list += movie
-                    }
-                    onSuccess?.invoke(list)
-                } else {
-                    onFailed?.invoke("http error code: $code")
-                }
+    constructor(context: Context){
+        this.context = context
+        builder = Ion.with(context)
+    }
+
+    constructor(fragment: Fragment) {
+        this.fragment = fragment
+        builder = Ion.with(fragment)
+    }
+
+    private fun loader(
+        url: String,
+        onComplete: (e: Exception?, response: Response<JsonObject>) -> Unit
+    ) {
+        builder
+            .load(url)
+            .asJsonObject()
+            .withResponse()
+            .setCallback { e, response ->
+                onComplete(e, response)
+            }
+    }
+
+    fun loadChecker(
+        url: String,
+        onComplete: (() -> Unit)? = null,
+        onResult: ((result: JsonObject) -> Unit)? = null,
+        onFailed: ((message: String) -> Unit)? = null
+    ) {
+        loader(url) { e, response ->
+            onComplete?.invoke()
+            if (e != null) {
+                onFailed?.invoke("${e.javaClass.simpleName} ${e.message}")
             } else {
-                onFailed?.invoke("http error code: $code")
+                val code = response.headers?.code()
+                if (code == 200) {
+                    val result = response.result
+                    onResult?.invoke(result)
+                } else {
+                    onFailed?.invoke("HTTP Error Code $code")
+                }
             }
         }
     }

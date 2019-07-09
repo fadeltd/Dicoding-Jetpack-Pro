@@ -27,3 +27,7 @@ inline fun <reified T> LiveData<T>.getData(): T {
 
     return data[0] as T
 }
+
+inline fun <reified T: Any> Any.cast(): T{
+    return this as T
+}

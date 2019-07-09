@@ -1,15 +1,19 @@
-package id.nerdstudio.moviecatalogue.viewmodel
+package id.nerdstudio.moviecatalogue.data.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import id.nerdstudio.moviecatalogue.api.ApiLoader
 import id.nerdstudio.moviecatalogue.data.source.ItemRepository
 import id.nerdstudio.moviecatalogue.di.Injection
 import id.nerdstudio.moviecatalogue.ui.detail.DetailViewModel
 import id.nerdstudio.moviecatalogue.ui.movie.MovieViewModel
 import id.nerdstudio.moviecatalogue.ui.tv.TvShowViewModel
 
-class ViewModelFactory private constructor(private val itemRepository: ItemRepository) :
+@Suppress("UNCHECKED_CAST")
+class ViewModelFactory private constructor(
+    private val itemRepository: ItemRepository
+) :
     ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -25,11 +29,11 @@ class ViewModelFactory private constructor(private val itemRepository: ItemRepos
         @Volatile
         private var INSTANCE: ViewModelFactory? = null
 
-        fun getInstance(application: Application): ViewModelFactory? {
+        fun getInstance(loader: ApiLoader, application: Application): ViewModelFactory? {
             if (INSTANCE == null) {
                 synchronized(ViewModelFactory::class.java) {
                     if (INSTANCE == null) {
-                        INSTANCE = ViewModelFactory(Injection.provideRepository(application))
+                        INSTANCE = ViewModelFactory(Injection.provideRepository(loader, application))
                     }
                 }
             }

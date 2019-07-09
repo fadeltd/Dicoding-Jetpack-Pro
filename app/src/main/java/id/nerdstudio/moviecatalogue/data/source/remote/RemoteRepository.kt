@@ -1,49 +1,95 @@
 package id.nerdstudio.moviecatalogue.data.source.remote
 
-import android.os.Handler
-import id.nerdstudio.moviecatalogue.data.Item
+import id.nerdstudio.moviecatalogue.api.ApiLoader
+import id.nerdstudio.moviecatalogue.api.ApiMovieDb
+import id.nerdstudio.moviecatalogue.data.Cast
+import id.nerdstudio.moviecatalogue.data.Movie
+import id.nerdstudio.moviecatalogue.data.TvShow
 import id.nerdstudio.moviecatalogue.data.Type
+import id.nerdstudio.moviecatalogue.data.Crew
 import id.nerdstudio.moviecatalogue.util.EspressoIdlingResource
-import id.nerdstudio.moviecatalogue.util.JsonUtils
 
+class RemoteRepository(private val loader: ApiLoader) {
 
-class RemoteRepository private constructor(private val jsonUtils: JsonUtils) {
-    fun getAllItems(
-        type: Type,
-        onReceived: ((itemResponses: List<Item>) -> Unit)? = null //,
-//        onDataNotAvailable: (() -> Unit)? = null
-    ) {
-        EspressoIdlingResource.increment()
-        val handler = Handler()
-        handler.postDelayed({
-            onReceived?.invoke(jsonUtils.loadItems(type))
-            EspressoIdlingResource.decrement()
-        }, SERVICE_LATENCY_IN_MILLIS)
+    private val apiMovieDb by lazy {
+        ApiMovieDb(loader)
     }
 
-//    fun getFavoriteItems(
-//        type: Type,
-//        onReceived: (itemResponses: List<Item>) -> Unit,
-//        onDataNotAvailable: (() -> Unit)? = null
-//    ) {
-//        EspressoIdlingResource.increment()
-//        val handler = Handler()
-//        handler.postDelayed({
-//            onReceived(jsonUtils.loadItems(type))
-//            EspressoIdlingResource.decrement()
-//        }, SERVICE_LATENCY_IN_MILLIS)
-//    }
+    fun getAllShows(
+        type: Type,
+        onComplete: (() -> Unit)? = null,
+        onSuccess: ((items: List<*>) -> Unit)? = null,
+        onFailed: ((message: String) -> Unit)? = null
+    ) {
+        EspressoIdlingResource.increment()
+        apiMovieDb.loadShows(type, {
+            EspressoIdlingResource.decrement()
+            onComplete?.invoke()
+        }, onSuccess, onFailed)
+    }
+
+    fun getMovieDetail(
+        id: Long,
+        onComplete: (() -> Unit)? = null,
+        onSuccess: ((show: Movie) -> Unit)? = null,
+        onFailed: ((message: String) -> Unit)? = null
+    ) {
+        EspressoIdlingResource.increment()
+        apiMovieDb.loadDetail(Type.MOVIE, id, {
+            EspressoIdlingResource.decrement()
+            onComplete?.invoke()
+        }, onSuccess, onFailed)
+    }
+
+    fun getTvShowDetail(
+        id: Long,
+        onComplete: (() -> Unit)? = null,
+        onSuccess: ((show: TvShow) -> Unit)? = null,
+        onFailed: ((message: String) -> Unit)? = null
+    ) {
+        EspressoIdlingResource.increment()
+        apiMovieDb.loadDetail(Type.TV_SHOW, id, {
+            EspressoIdlingResource.decrement()
+            onComplete?.invoke()
+        }, onSuccess, onFailed)
+    }
+
+    fun getCredits(
+        type: Type,
+        id: Long,
+        onComplete: (() -> Unit)? = null,
+        onSuccess: ((castList: List<Cast>, crewList: List<Crew>) -> Unit)? = null,
+        onFailed: ((message: String) -> Unit)? = null
+    ){
+        EspressoIdlingResource.increment()
+        apiMovieDb.loadCredits(type, id, {
+            EspressoIdlingResource.decrement()
+            onComplete?.invoke()
+        }, onSuccess, onFailed)
+    }
+
+    fun getSimilar(
+        type: Type,
+        id: Long,
+        onComplete: (() -> Unit)? = null,
+        onSuccess: ((shows: List<*>) -> Unit)? = null,
+        onFailed: ((message: String) -> Unit)? = null
+    ){
+        EspressoIdlingResource.increment()
+        apiMovieDb.loadSimilar(type, id, {
+            EspressoIdlingResource.decrement()
+            onComplete?.invoke()
+        }, onSuccess, onFailed)
+    }
 
     companion object {
-        private const val SERVICE_LATENCY_IN_MILLIS: Long = 2000
         private var INSTANCE: RemoteRepository? = null
 
-        fun getInstance(utils: JsonUtils): RemoteRepository {
+        fun getInstance(loader: ApiLoader): RemoteRepository {
             if (INSTANCE == null) {
-                INSTANCE = RemoteRepository(utils)
+                INSTANCE = RemoteRepository(loader)
             }
             return INSTANCE as RemoteRepository
         }
     }
-
 }

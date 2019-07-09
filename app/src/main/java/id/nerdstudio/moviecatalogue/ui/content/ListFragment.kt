@@ -9,12 +9,14 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import id.nerdstudio.moviecatalogue.R
+import id.nerdstudio.moviecatalogue.api.ApiLoader
 import id.nerdstudio.moviecatalogue.data.Item
+import id.nerdstudio.moviecatalogue.data.Movie
 import id.nerdstudio.moviecatalogue.data.Type
 import id.nerdstudio.moviecatalogue.ui.movie.MovieViewModel
 import id.nerdstudio.moviecatalogue.ui.tv.TvShowViewModel
 import id.nerdstudio.moviecatalogue.util.observe
-import id.nerdstudio.moviecatalogue.viewmodel.ViewModelFactory
+import id.nerdstudio.moviecatalogue.data.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_list.*
 
 class ListFragment : Fragment() {
@@ -39,7 +41,7 @@ class ListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let {
-            val factory = ViewModelFactory.getInstance(it.application)
+            val factory = ViewModelFactory.getInstance(ApiLoader(this), it.application)
             val viewModel = ViewModelProviders.of(this, factory)
                 .get(
                     if (type == Type.MOVIE) MovieViewModel::class.java
@@ -47,16 +49,24 @@ class ListFragment : Fragment() {
                 )
 
             when (viewModel) {
+                // is MovieViewModel -> viewModel.getMoviesRemote().observe(this, ::notifyMovie)
                 is MovieViewModel -> viewModel.getMovies().observe(this, ::notifyData)
                 is TvShowViewModel -> viewModel.getTvShows().observe(this, ::notifyData)
             }
 
-            val adapter = ListAdapter(it, listOf(), type)
+            val adapter = ListAdapter(it, type)
             val recyclerView = recycler_view
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(it, RecyclerView.VERTICAL, false)
             recyclerView.setHasFixedSize(true)
         }
+    }
+
+    private fun notifyMovie(movies: List<Movie>){
+        hideLoading()
+        val adapter = (recycler_view.adapter as ListAdapter)
+        adapter.setMovieData(movies)
+        adapter.notifyDataSetChanged()
     }
 
     private fun notifyData(items: List<Item>) {

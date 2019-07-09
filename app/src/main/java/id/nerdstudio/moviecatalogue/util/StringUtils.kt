@@ -2,7 +2,7 @@ package id.nerdstudio.moviecatalogue.util
 
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
-import java.util.*
+import java.util.Locale
 
 fun String.parseDate(): DateTime {
     return try {
