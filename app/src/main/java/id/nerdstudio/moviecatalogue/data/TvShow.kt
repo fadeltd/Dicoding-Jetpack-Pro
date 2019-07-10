@@ -1,8 +1,11 @@
 package id.nerdstudio.moviecatalogue.data
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 import java.util.Arrays
 
+@Parcelize
 data class TvShow(
     @SerializedName("original_name")
     val originalName: String? = null,
@@ -31,7 +34,7 @@ data class TvShow(
     @SerializedName("poster_path")
     override val posterPath: String? = null,
     @SerializedName("created_by")
-    val createdBy: Array<Credit> = emptyArray(),
+    val createdBy: Array<Crew> = emptyArray(),
     @SerializedName("episode_run_time")
     val episodeRunTime: Int = 0,
     @SerializedName("genres")
@@ -62,33 +65,33 @@ data class TvShow(
     override val status: String? = null,
     @SerializedName("type")
     val type: String? = null
-) : Show(
-    id,
-    voteAverage,
-    popularity,
-    posterPath,
-    originalLanguage,
-    genreIds,
-    backdropPath,
-    overview,
-    genres,
-    homepage,
-    productionCompanies,
-    status,
-    voteCount
-) {
+) : Show(), Parcelable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other?.javaClass != javaClass) return false
         other as TvShow
         if (!Arrays.equals(genreIds, other.genreIds) &&
-            !Arrays.equals(originCountry, other.originCountry)
-        )
+            !Arrays.equals(originCountry, other.originCountry) &&
+            !Arrays.equals(createdBy, other.createdBy) &&
+            !Arrays.equals(genres, other.genres) &&
+            !Arrays.equals(languages, other.languages) &&
+            !Arrays.equals(network, other.network) &&
+            !Arrays.equals(productionCompanies, other.productionCompanies) &&
+            !Arrays.equals(seasons, other.seasons)
+        ) {
             return false
+        }
         return true
     }
 
     override fun hashCode(): Int {
-        return super.hashCode() + Arrays.hashCode(genreIds) + Arrays.hashCode(originCountry)
+        return Arrays.hashCode(genreIds) +
+                Arrays.hashCode(originCountry) +
+                Arrays.hashCode(createdBy) +
+                Arrays.hashCode(genres) +
+                Arrays.hashCode(languages) +
+                Arrays.hashCode(network) +
+                Arrays.hashCode(productionCompanies) +
+                Arrays.hashCode(seasons)
     }
 }

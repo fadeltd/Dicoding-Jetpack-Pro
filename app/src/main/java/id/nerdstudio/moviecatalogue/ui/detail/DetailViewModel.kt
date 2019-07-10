@@ -2,8 +2,7 @@ package id.nerdstudio.moviecatalogue.ui.detail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import id.nerdstudio.moviecatalogue.data.Item
-import id.nerdstudio.moviecatalogue.data.Type
+import id.nerdstudio.moviecatalogue.data.*
 import id.nerdstudio.moviecatalogue.data.source.ItemRepository
 
 class DetailViewModel(private val itemRepository: ItemRepository) : ViewModel() {
@@ -12,5 +11,21 @@ class DetailViewModel(private val itemRepository: ItemRepository) : ViewModel() 
 
     fun getItem(): LiveData<Item>? {
         return itemRepository.getContent(id, type)
+    }
+
+    fun getMovieDetail(): LiveData<Movie>{
+        return itemRepository.getMovieDetail(id)
+    }
+
+    fun getMovieCast(): LiveData<List<Cast>>{
+        return itemRepository.getMovieCast(id)
+    }
+
+    fun getMovieCrew() : LiveData<List<Crew>> {
+        return itemRepository.getMovieCrew(id)
+    }
+
+    fun getSimilarMovies() : LiveData<List<Movie>> {
+        return itemRepository.getMovieSimilar(id)
     }
 }

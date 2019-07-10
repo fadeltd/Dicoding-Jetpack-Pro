@@ -6,6 +6,7 @@ import id.nerdstudio.moviecatalogue.data.Crew
 import id.nerdstudio.moviecatalogue.data.Movie
 
 interface MovieDataSource {
+
     fun getAllMoviesRemote(): LiveData<List<Movie>>
 
     fun getMovieCast(id: Long): LiveData<List<Cast>>

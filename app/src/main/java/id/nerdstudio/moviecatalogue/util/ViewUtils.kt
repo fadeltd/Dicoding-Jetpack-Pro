@@ -1,7 +1,9 @@
 package id.nerdstudio.moviecatalogue.util
 
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.widget.ImageView
+import android.widget.Toast
 import id.nerdstudio.moviecatalogue.R
 
 fun ImageView.setImagePoster(name: String?) {
@@ -12,4 +14,8 @@ fun ImageView.setImagePoster(name: String?) {
     } else {
         setImageResource(R.drawable.img_default)
     }
+}
+
+fun Context.showToast(message: String, length: Int = Toast.LENGTH_SHORT){
+    Toast.makeText(this, message, length).show()
 }

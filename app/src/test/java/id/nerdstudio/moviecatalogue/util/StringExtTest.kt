@@ -4,7 +4,7 @@ import org.joda.time.DateTime
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class StringUtilsTest {
+class StringExtTest {
 
     @Test
     fun parseDate() {

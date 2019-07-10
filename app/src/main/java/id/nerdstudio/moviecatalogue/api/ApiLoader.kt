@@ -42,6 +42,7 @@ class ApiLoader {
         onResult: ((result: JsonObject) -> Unit)? = null,
         onFailed: ((message: String) -> Unit)? = null
     ) {
+        println("Loading: $url")
         loader(url) { e, response ->
             onComplete?.invoke()
             if (e != null) {

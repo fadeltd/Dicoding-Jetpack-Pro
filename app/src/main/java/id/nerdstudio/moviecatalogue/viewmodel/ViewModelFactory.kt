@@ -1,4 +1,4 @@
-package id.nerdstudio.moviecatalogue.data.viewmodel
+package id.nerdstudio.moviecatalogue.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

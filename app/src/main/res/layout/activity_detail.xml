@@ -142,6 +142,7 @@
 
                     <TextView
                             android:visibility="gone"
+                            android:id="@+id/movie_language_label"
                             android:layout_marginTop="2dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -164,6 +165,7 @@
 
                     <TextView
                             android:visibility="gone"
+                            android:id="@+id/movie_runtime_label"
                             android:layout_marginTop="2dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -176,7 +178,7 @@
                     <TextView
                             android:visibility="gone"
                             android:layout_marginTop="2dp"
-                            android:id="@+id/movie_duration"
+                            android:id="@+id/movie_runtime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             tools:text="2h 42m"
@@ -186,6 +188,7 @@
 
                     <TextView
                             android:visibility="gone"
+                            android:id="@+id/movie_budget_label"
                             android:layout_marginTop="2dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -208,6 +211,7 @@
 
                     <TextView
                             android:visibility="gone"
+                            android:id="@+id/movie_revenue_label"
                             android:layout_marginTop="2dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -301,11 +305,12 @@
                         android:layout_height="wrap_content">
 
                 </androidx.recyclerview.widget.RecyclerView>
+
             </LinearLayout>
 
             <FrameLayout
                     android:visibility="gone"
-                    android:id="@+id/loading_similar_layout"
+                    android:id="@+id/loading_movie_similar_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 

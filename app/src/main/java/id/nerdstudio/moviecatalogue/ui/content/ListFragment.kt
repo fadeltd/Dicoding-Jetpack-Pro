@@ -16,7 +16,8 @@ import id.nerdstudio.moviecatalogue.data.Type
 import id.nerdstudio.moviecatalogue.ui.movie.MovieViewModel
 import id.nerdstudio.moviecatalogue.ui.tv.TvShowViewModel
 import id.nerdstudio.moviecatalogue.util.observe
-import id.nerdstudio.moviecatalogue.data.viewmodel.ViewModelFactory
+import id.nerdstudio.moviecatalogue.util.showToast
+import id.nerdstudio.moviecatalogue.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_list.*
 
 class ListFragment : Fragment() {
@@ -49,8 +50,12 @@ class ListFragment : Fragment() {
                 )
 
             when (viewModel) {
-                // is MovieViewModel -> viewModel.getMoviesRemote().observe(this, ::notifyMovie)
+//                is MovieViewModel -> viewModel.getMoviesRemote().observe(this, ::notifyMovie)
                 is MovieViewModel -> viewModel.getMovies().observe(this, ::notifyData)
+//                is MovieViewModel -> viewModel.getMoviesApi().observe(this, { data ->
+//                    val (complete, movies, failMessage) = data
+//                    notifyMovieApi(complete, movies, failMessage)
+//                })
                 is TvShowViewModel -> viewModel.getTvShows().observe(this, ::notifyData)
             }
 
@@ -62,7 +67,21 @@ class ListFragment : Fragment() {
         }
     }
 
-    private fun notifyMovie(movies: List<Movie>){
+//    private fun notifyMovieApi(complete: Boolean, movies: List<Movie>, failMessage: String) {
+//        if (complete) {
+//            hideLoading()
+//        }
+//        if (!movies.isNullOrEmpty()) {
+//            val adapter = (recycler_view.adapter as ListAdapter)
+//            adapter.setMovieData(movies)
+//            adapter.notifyDataSetChanged()
+//        }
+//        if (failMessage.isNotEmpty()) {
+//            context?.showToast(failMessage)
+//        }
+//    }
+
+    private fun notifyMovie(movies: List<Movie>) {
         hideLoading()
         val adapter = (recycler_view.adapter as ListAdapter)
         adapter.setMovieData(movies)

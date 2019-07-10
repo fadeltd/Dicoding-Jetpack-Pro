@@ -38,14 +38,14 @@ object AppConfig {
         "$BASE_URL${type.value}/$id?$API_KEY&language=${language.name.toLowerCase()}"
 
     fun getCredits(type: Type = Type.MOVIE, id: Long, language: Language = Language.EN) =
-        "$BASE_URL${type.value}/$id/credits${type.name.toLowerCase()}?$API_KEY&language=${language.name.toLowerCase()}"
+        "$BASE_URL${type.value}/$id/credits?$API_KEY&language=${language.name.toLowerCase()}"
 
     fun getSimilar(type: Type = Type.MOVIE, id: Long, language: Language = Language.EN) =
-        "$BASE_URL${type.value}/$id/similar${type.name.toLowerCase()}?$API_KEY&language=${language.name.toLowerCase()}"
+        "$BASE_URL${type.value}/$id/similar?$API_KEY&language=${language.name.toLowerCase()}"
 
     fun withQuery(query: String, language: Language) =
         "${SEARCH_MOVIE}query=$query&language=${language.name.toLowerCase()}"
 
-    fun getPosterPath(path: String, type: PosterType = PosterType.ORIGINAL) =
+    fun getImageUrl(path: String, type: PosterType = PosterType.ORIGINAL) =
         "$BASE_IMAGE_URL${type.name.toLowerCase()}$path"
 }

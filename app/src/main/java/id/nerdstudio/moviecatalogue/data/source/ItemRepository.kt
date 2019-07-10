@@ -1,6 +1,7 @@
 package id.nerdstudio.moviecatalogue.data.source
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import id.nerdstudio.moviecatalogue.data.Movie
 import id.nerdstudio.moviecatalogue.data.Cast
@@ -14,6 +15,27 @@ class ItemRepository(
     private val localRepository: LocalRepository,
     private val remoteRepository: RemoteRepository
 ) : ItemDataSource, MovieDataSource {
+
+//    fun getAllMoviesApi(): LiveData<Triple<Boolean, List<Movie>, String>> {
+//        val complete = MutableLiveData<Boolean>()
+//        val result = MutableLiveData<List<Movie>>()
+//        val fail = MutableLiveData<String>()
+//        remoteRepository.getAllShows(Type.MOVIE, {
+//            complete.postValue(true)
+//        }, { movies ->
+//            var movieList = listOf<Movie>()
+//            for (i in movies.indices) {
+//                val movie = movies[i]
+//                movieList += movie as Movie
+//            }
+//            result.postValue(movieList)
+//        }, {
+//            fail.postValue(it)
+//        })
+//        return complete.combineAndCompute(result) { a, b ->
+//
+//        }
+//    }
 
     /**
      * Remote repository

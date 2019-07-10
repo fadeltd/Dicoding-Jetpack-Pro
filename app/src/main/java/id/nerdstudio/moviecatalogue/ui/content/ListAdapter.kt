@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.koushikdutta.ion.Ion
 import id.nerdstudio.moviecatalogue.R
-import id.nerdstudio.moviecatalogue.config.AppConfig.getPosterPath
+import id.nerdstudio.moviecatalogue.config.AppConfig.getImageUrl
 import id.nerdstudio.moviecatalogue.data.Item
 import id.nerdstudio.moviecatalogue.data.Movie
 import id.nerdstudio.moviecatalogue.data.Type
@@ -57,7 +57,7 @@ class ListAdapter(private val context: Context, private val type: Type) :
                         loading_movie_poster.visibility = View.VISIBLE
                         loading_movie_poster.startShimmerAnimation()
 
-                        val url = getPosterPath(this)
+                        val url = getImageUrl(this)
                         Ion.with(context)
                             .load(url)
                             .asBitmap()

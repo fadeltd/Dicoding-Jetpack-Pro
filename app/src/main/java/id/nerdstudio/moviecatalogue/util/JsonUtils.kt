@@ -22,6 +22,10 @@ fun JsonObject.safeFloat(key: String): Float {
 
 inline fun <reified T> JsonObject.toObject(): T = Gson().fromJson(this, T::class.java)
 
+inline fun <reified T : Any> Any.cast(): T {
+    return this as T
+}
+
 class JsonUtils(private val application: Application) {
 
     private fun readFile(fileName: String): String? {
@@ -58,5 +62,4 @@ class JsonUtils(private val application: Application) {
         }
         return list
     }
-
 }
