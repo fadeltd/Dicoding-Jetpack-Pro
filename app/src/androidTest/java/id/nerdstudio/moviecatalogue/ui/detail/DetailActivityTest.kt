@@ -8,7 +8,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import id.nerdstudio.moviecatalogue.R
-import id.nerdstudio.moviecatalogue.data.Type
+import id.nerdstudio.moviecatalogue.data.entity.Type
 import id.nerdstudio.moviecatalogue.util.Dummy
 import id.nerdstudio.moviecatalogue.util.EspressoIdlingResource
 import id.nerdstudio.moviecatalogue.util.parseDate

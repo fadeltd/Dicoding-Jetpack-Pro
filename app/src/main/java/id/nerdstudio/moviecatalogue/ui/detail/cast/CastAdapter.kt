@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.koushikdutta.ion.Ion
 import id.nerdstudio.moviecatalogue.R
 import id.nerdstudio.moviecatalogue.config.AppConfig.getImageUrl
-import id.nerdstudio.moviecatalogue.data.Cast
+import id.nerdstudio.moviecatalogue.data.entity.Cast
 import id.nerdstudio.moviecatalogue.config.AppConfig.PosterType.W185
 import kotlinx.android.synthetic.main.item_cast.view.*
 

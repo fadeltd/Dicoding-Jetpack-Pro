@@ -1,18 +1,18 @@
 package id.nerdstudio.moviecatalogue.data.source.remote
 
 import id.nerdstudio.moviecatalogue.api.ApiLoader
-import id.nerdstudio.moviecatalogue.api.ApiMovieDb
-import id.nerdstudio.moviecatalogue.data.Cast
-import id.nerdstudio.moviecatalogue.data.Movie
-import id.nerdstudio.moviecatalogue.data.TvShow
-import id.nerdstudio.moviecatalogue.data.Type
-import id.nerdstudio.moviecatalogue.data.Crew
+import id.nerdstudio.moviecatalogue.api.ApiTMDB
+import id.nerdstudio.moviecatalogue.data.entity.Cast
+import id.nerdstudio.moviecatalogue.data.entity.Movie
+import id.nerdstudio.moviecatalogue.data.entity.TvShow
+import id.nerdstudio.moviecatalogue.data.entity.Type
+import id.nerdstudio.moviecatalogue.data.entity.Crew
 import id.nerdstudio.moviecatalogue.util.EspressoIdlingResource
 
 class RemoteRepository(private val loader: ApiLoader) {
 
     private val apiMovieDb by lazy {
-        ApiMovieDb(loader)
+        ApiTMDB(loader)
     }
 
     fun getAllShows(

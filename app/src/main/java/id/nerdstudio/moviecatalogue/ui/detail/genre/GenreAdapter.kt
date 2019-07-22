@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import id.nerdstudio.moviecatalogue.R
-import id.nerdstudio.moviecatalogue.data.Genre
+import id.nerdstudio.moviecatalogue.data.entity.Genre
 import kotlinx.android.synthetic.main.item_genre.view.*
 
 class GenreAdapter(

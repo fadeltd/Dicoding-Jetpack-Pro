@@ -1,13 +1,13 @@
-package id.nerdstudio.moviecatalogue.data
+package id.nerdstudio.moviecatalogue.data.entity
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class ProductionCountry(
-    @SerializedName("iso_3166_1")
-    val iso: String = "",
+data class Genre(
+    @SerializedName("id")
+    val id: Int = 0,
     @SerializedName("name")
     val name: String = ""
 ) : Parcelable

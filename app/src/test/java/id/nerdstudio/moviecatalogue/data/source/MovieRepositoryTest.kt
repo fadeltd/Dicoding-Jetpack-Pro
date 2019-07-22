@@ -2,8 +2,8 @@ package id.nerdstudio.moviecatalogue.data.source
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.*
-import id.nerdstudio.moviecatalogue.data.Item
-import id.nerdstudio.moviecatalogue.data.Type
+import id.nerdstudio.moviecatalogue.data.entity.Item
+import id.nerdstudio.moviecatalogue.data.entity.Type
 import id.nerdstudio.moviecatalogue.data.source.remote.RemoteRepository
 import id.nerdstudio.moviecatalogue.data.source.local.LocalRepository
 import id.nerdstudio.moviecatalogue.util.Dummy
@@ -14,14 +14,14 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class ItemRepositoryTest {
+class MovieRepositoryTest {
     @Rule
     @JvmField
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val local: LocalRepository = mock()
     private val remote: RemoteRepository = mock()
-    private val itemRepository = ItemRepository(local, remote)
+    private val itemRepository = CatalogueRepository(local, remote)
 
     private val movies = Dummy.dummyMovies()
     private val movieId = movies[0].id
@@ -77,7 +77,7 @@ class ItemRepositoryTest {
     @Test
     fun getMovieContent() {
         val id = movieId ?: 0
-        val type = Type.MOVIE
+        val type = id.nerdstudio.moviecatalogue.data.entity.Type.MOVIE
 
         whenever(local.getAllItems(eq(type), any())).thenAnswer {
             val callback = it.getArgument<((tvShows: List<Item>) -> Unit)>(1)
@@ -91,7 +91,7 @@ class ItemRepositoryTest {
     @Test
     fun getTvShowContent() {
         val id = tvShowId ?: 0
-        val type = Type.TV_SHOW
+        val type = id.nerdstudio.moviecatalogue.data.entity.Type.TV_SHOW
 
         whenever(local.getAllItems(eq(type), any())).thenAnswer {
             val callback = it.arguments[1]

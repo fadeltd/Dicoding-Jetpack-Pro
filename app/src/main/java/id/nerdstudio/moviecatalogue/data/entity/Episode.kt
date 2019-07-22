@@ -1,9 +1,11 @@
-package id.nerdstudio.moviecatalogue.data
+package id.nerdstudio.moviecatalogue.data.entity
 
 import android.os.Parcelable
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
+@Entity
 @Parcelize
 data class Episode(
     @SerializedName("air_date")
@@ -25,7 +27,7 @@ data class Episode(
     @SerializedName("still_path")
     val stillPath: String? = null,
     @SerializedName("vote_average")
-    val voteAvergae: Float = 0F,
+    val voteAverage: Float = 0F,
     @SerializedName("vote_count")
     val voteCount: Int = 0
 ) : Parcelable

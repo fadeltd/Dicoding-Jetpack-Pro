@@ -1,4 +1,4 @@
-package id.nerdstudio.moviecatalogue.data
+package id.nerdstudio.moviecatalogue.data.entity
 
 abstract class Credit {
     abstract val id: Long

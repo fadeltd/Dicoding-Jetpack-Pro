@@ -9,8 +9,9 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
 import id.nerdstudio.moviecatalogue.R
-import id.nerdstudio.moviecatalogue.data.Type
+import id.nerdstudio.moviecatalogue.data.entity.Type
 import id.nerdstudio.moviecatalogue.testing.SingleFragmentActivity
+import id.nerdstudio.moviecatalogue.ui.main.PageType
 import id.nerdstudio.moviecatalogue.util.EspressoIdlingResource
 import id.nerdstudio.moviecatalogue.util.RecyclerViewItemCountAssertion
 import org.hamcrest.Matchers
@@ -24,8 +25,8 @@ class ListFragmentTest {
     @Rule
     @JvmField
     var activityRule = ActivityTestRule(SingleFragmentActivity::class.java)
-    private val movieFragment = ListFragment.newInstance(Type.MOVIE)
-    private val tvShowFragment = ListFragment.newInstance(Type.TV_SHOW)
+    private val movieFragment = ListFragment.newInstance(Type.MOVIE, PageType.HOME)
+    private val tvShowFragment = ListFragment.newInstance(Type.TV_SHOW, PageType.FAVORITE)
 
     @Before
     fun setUp() {

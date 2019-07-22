@@ -1,41 +1,23 @@
 package id.nerdstudio.moviecatalogue.data.source
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import id.nerdstudio.moviecatalogue.data.Movie
-import id.nerdstudio.moviecatalogue.data.Cast
-import id.nerdstudio.moviecatalogue.data.Crew
-import id.nerdstudio.moviecatalogue.data.Item
-import id.nerdstudio.moviecatalogue.data.Type
+import androidx.paging.PagedList
+import id.nerdstudio.moviecatalogue.data.entity.*
+import id.nerdstudio.moviecatalogue.data.source.favorite.FavoriteRepository
 import id.nerdstudio.moviecatalogue.data.source.remote.RemoteRepository
 import id.nerdstudio.moviecatalogue.data.source.local.LocalRepository
+import id.nerdstudio.moviecatalogue.util.AppExecutors
+import id.nerdstudio.moviecatalogue.vo.Resource
+import androidx.paging.LivePagedListBuilder
 
-class ItemRepository(
+
+class CatalogueRepository(
     private val localRepository: LocalRepository,
-    private val remoteRepository: RemoteRepository
+    private val remoteRepository: RemoteRepository,
+    private val favoriteRepository: FavoriteRepository,
+    private val appExecutors: AppExecutors
 ) : ItemDataSource, MovieDataSource {
-
-//    fun getAllMoviesApi(): LiveData<Triple<Boolean, List<Movie>, String>> {
-//        val complete = MutableLiveData<Boolean>()
-//        val result = MutableLiveData<List<Movie>>()
-//        val fail = MutableLiveData<String>()
-//        remoteRepository.getAllShows(Type.MOVIE, {
-//            complete.postValue(true)
-//        }, { movies ->
-//            var movieList = listOf<Movie>()
-//            for (i in movies.indices) {
-//                val movie = movies[i]
-//                movieList += movie as Movie
-//            }
-//            result.postValue(movieList)
-//        }, {
-//            fail.postValue(it)
-//        })
-//        return complete.combineAndCompute(result) { a, b ->
-//
-//        }
-//    }
 
     /**
      * Remote repository
@@ -48,7 +30,7 @@ class ItemRepository(
             var movieList = listOf<Movie>()
             for (i in movies.indices) {
                 val movie = movies[i]
-                movieList += movie as Movie
+                movieList = movieList + movie as Movie
             }
             movieResults.postValue(movieList)
         }, {
@@ -64,7 +46,7 @@ class ItemRepository(
         }, { castList, _ ->
             var list = listOf<Cast>()
             for (i in castList.indices) {
-                list += castList[i]
+                list = list + castList[i]
             }
             result.postValue(list)
         }, {
@@ -80,7 +62,7 @@ class ItemRepository(
         }, { _, crewList ->
             var list = listOf<Crew>()
             for (i in crewList.indices) {
-                list += crewList[i]
+                list = list + crewList[i]
             }
             result.postValue(list)
         }, {
@@ -96,7 +78,7 @@ class ItemRepository(
         }, { movies ->
             var list = listOf<Movie>()
             for (i in movies.indices) {
-                list += movies[i] as Movie
+                list = list + movies[i] as Movie
             }
             result.postValue(list)
         }, {
@@ -126,7 +108,7 @@ class ItemRepository(
             var movieList = listOf<Item>()
             for (i in movies.indices) {
                 val movie = movies[i]
-                movieList += movie
+                movieList = movieList + movie
             }
             movieResults.postValue(movieList)
         }
@@ -139,7 +121,7 @@ class ItemRepository(
             var tvShowList = listOf<Item>()
             for (i in tvShows.indices) {
                 val tvShow = tvShows[i]
-                tvShowList += tvShow
+                tvShowList = tvShowList + tvShow
             }
             tvShowResults.postValue(tvShowList)
         }
@@ -161,22 +143,45 @@ class ItemRepository(
         return itemResult
     }
 
+    //region Favorites
+    fun insertFavoriteMovie(movie: Movie) {
+        favoriteRepository.insertFavoriteMovie(movie)
+    }
+
+    fun insertFavoriteTvShow(tvShow: TvShow) {
+        favoriteRepository.insertFavoriteTvShow(tvShow)
+    }
+
+    fun getFavoriteMovies(): LiveData<PagedList<Movie>> {
+        return LivePagedListBuilder(favoriteRepository.getFavoriteMoviesPaged(), 20).build()
+    }
+
+    fun getFavoriteTvShows(): LiveData<PagedList<TvShow>> {
+        return LivePagedListBuilder(favoriteRepository.getFavoriteTvShowsPaged(), 20).build()
+    }
+    //endregion
+
     companion object {
         @Volatile
-        private var INSTANCE: ItemRepository? = null
+        private var INSTANCE: CatalogueRepository? = null
 
         fun getInstance(
             localRepository: LocalRepository,
-            remoteRepository: RemoteRepository
-        ): ItemRepository {
-            if (INSTANCE == null) {
-                synchronized(ItemRepository::class.java) {
-                    if (INSTANCE == null) {
-                        INSTANCE = ItemRepository(localRepository, remoteRepository)
-                    }
+            remoteRepository: RemoteRepository,
+            favoriteRepository: FavoriteRepository,
+            appExecutors: AppExecutors
+        ): CatalogueRepository {
+            synchronized(CatalogueRepository::class.java) {
+                if (INSTANCE == null) {
+                    INSTANCE = CatalogueRepository(
+                        localRepository,
+                        remoteRepository,
+                        favoriteRepository,
+                        appExecutors
+                    )
                 }
+                return INSTANCE as CatalogueRepository
             }
-            return INSTANCE!!
         }
     }
 }

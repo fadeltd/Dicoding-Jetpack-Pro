@@ -1,6 +1,7 @@
 package id.nerdstudio.moviecatalogue.ui.detail
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
@@ -12,23 +13,28 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import com.koushikdutta.ion.Ion
 import id.nerdstudio.moviecatalogue.R
 import id.nerdstudio.moviecatalogue.api.ApiLoader
-import id.nerdstudio.moviecatalogue.config.AppConfig.getImageUrl
-import id.nerdstudio.moviecatalogue.ui.detail.cast.CastAdapter
-import id.nerdstudio.moviecatalogue.viewmodel.ViewModelFactory
 import id.nerdstudio.moviecatalogue.config.AppConfig.PosterType.W500
-import id.nerdstudio.moviecatalogue.data.*
+import id.nerdstudio.moviecatalogue.config.AppConfig.getImageUrl
+import id.nerdstudio.moviecatalogue.data.entity.*
+import id.nerdstudio.moviecatalogue.ui.detail.cast.CastAdapter
 import id.nerdstudio.moviecatalogue.ui.detail.genre.GenreAdapter
 import id.nerdstudio.moviecatalogue.ui.detail.similar.SimilarAdapter
 import id.nerdstudio.moviecatalogue.util.*
+import id.nerdstudio.moviecatalogue.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.shimmer_cast.*
 import kotlinx.android.synthetic.main.shimmer_genre.*
 import kotlinx.android.synthetic.main.shimmer_movie_detail.*
 import kotlinx.android.synthetic.main.shimmer_movie_similar.*
 import java.text.NumberFormat
-import java.util.Locale
+import java.util.*
 
 class DetailActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: DetailViewModel
+    private lateinit var type: Type
+    private lateinit var movie: Movie
+    private lateinit var tvShow: TvShow
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,13 +43,13 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val factory = ViewModelFactory.getInstance(ApiLoader(this), application)
-        val viewModel = ViewModelProviders
+        viewModel = ViewModelProviders
             .of(this, factory)
             .get(DetailViewModel::class.java)
 
         intent.extras?.let {
             val id = it.getLong(ARG_ID)
-            val type = Type.values()[it.getInt(ARG_TYPE)]
+            type = Type.values()[it.getInt(ARG_TYPE)]
             viewModel.id = id
             viewModel.type = type
             if (type == Type.MOVIE) {
@@ -130,34 +136,6 @@ class DetailActivity : AppCompatActivity() {
         hideLoading(shimmer_loading_movie_similar, loading_movie_similar_layout, movie_similar_layout)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                onBackPressed()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        shimmer_loading_movie_detail.startShimmer()
-        loading_movie_poster.startShimmer()
-        shimmer_loading_cast.startShimmer()
-        shimmer_loading_genre.startShimmer()
-        shimmer_loading_movie_similar.startShimmer()
-    }
-
-    override fun onPause() {
-        shimmer_loading_movie_detail.stopShimmerAnimation()
-        loading_movie_poster.stopShimmerAnimation()
-        shimmer_loading_cast.stopShimmerAnimation()
-        shimmer_loading_genre.stopShimmerAnimation()
-        shimmer_loading_movie_similar.stopShimmerAnimation()
-        super.onPause()
-    }
-
     private fun showLoading(layout: ShimmerFrameLayout, shimmerContainer: View, view: View) {
         view.visibility = View.GONE
         layout.startShimmer()
@@ -192,14 +170,50 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        shimmer_loading_movie_detail.startShimmer()
+        loading_movie_poster.startShimmer()
+        shimmer_loading_cast.startShimmer()
+        shimmer_loading_genre.startShimmer()
+        shimmer_loading_movie_similar.startShimmer()
+    }
+
+    override fun onPause() {
+        shimmer_loading_movie_detail.stopShimmerAnimation()
+        loading_movie_poster.stopShimmerAnimation()
+        shimmer_loading_cast.stopShimmerAnimation()
+        shimmer_loading_genre.stopShimmerAnimation()
+        shimmer_loading_movie_similar.stopShimmerAnimation()
+        super.onPause()
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_favorite, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            R.id.menu_favorite -> {
+                if (type == Type.MOVIE) {
+                    viewModel.addToFavorite(movie)
+                } else {
+                    viewModel.addToFavorite(tvShow)
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     companion object {
         const val ARG_ID = "id"
         const val ARG_TYPE = "type"
-    }
-}
-
-fun ShimmerFrameLayout.startShimmer() {
-    if (visibility == View.VISIBLE) {
-        this.startShimmerAnimation()
     }
 }

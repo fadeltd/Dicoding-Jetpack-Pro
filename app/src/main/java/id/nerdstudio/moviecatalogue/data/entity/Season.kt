@@ -1,4 +1,4 @@
-package id.nerdstudio.moviecatalogue.data
+package id.nerdstudio.moviecatalogue.data.entity
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

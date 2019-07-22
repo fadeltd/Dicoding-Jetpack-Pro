@@ -1,8 +1,7 @@
 package id.nerdstudio.moviecatalogue.config
 
 import id.nerdstudio.moviecatalogue.BuildConfig
-import id.nerdstudio.moviecatalogue.data.Type
-
+import id.nerdstudio.moviecatalogue.data.entity.Type
 
 object AppConfig {
     private const val API_KEY = "api_key=${BuildConfig.API_KEY}"

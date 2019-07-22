@@ -4,7 +4,7 @@ import com.google.gson.JsonParser
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import id.nerdstudio.moviecatalogue.data.Type
+import id.nerdstudio.moviecatalogue.data.entity.Type
 import id.nerdstudio.moviecatalogue.util.Dummy.dummyMovies
 import id.nerdstudio.moviecatalogue.util.Dummy.dummyTvShows
 import org.junit.Assert.assertEquals

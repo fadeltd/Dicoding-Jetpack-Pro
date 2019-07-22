@@ -1,6 +1,6 @@
 package id.nerdstudio.moviecatalogue.util
 
-import id.nerdstudio.moviecatalogue.data.Item
+import id.nerdstudio.moviecatalogue.data.entity.Item
 
 object Dummy {
     fun dummyMovies(): List<Item> {

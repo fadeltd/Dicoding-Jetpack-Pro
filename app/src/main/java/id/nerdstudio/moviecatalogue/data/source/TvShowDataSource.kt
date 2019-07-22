@@ -1,9 +1,9 @@
 package id.nerdstudio.moviecatalogue.data.source
 
 import androidx.lifecycle.LiveData
-import id.nerdstudio.moviecatalogue.data.Cast
-import id.nerdstudio.moviecatalogue.data.Crew
-import id.nerdstudio.moviecatalogue.data.TvShow
+import id.nerdstudio.moviecatalogue.data.entity.Cast
+import id.nerdstudio.moviecatalogue.data.entity.Crew
+import id.nerdstudio.moviecatalogue.data.entity.TvShow
 
 interface TvShowDataSource {
     fun getAllTvShowRemote(): LiveData<List<TvShow>>

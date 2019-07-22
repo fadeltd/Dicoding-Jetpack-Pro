@@ -10,11 +10,11 @@ import com.koushikdutta.ion.Ion
 import id.nerdstudio.moviecatalogue.R
 import id.nerdstudio.moviecatalogue.config.AppConfig.getImageUrl
 import id.nerdstudio.moviecatalogue.config.AppConfig.PosterType.W185
-import id.nerdstudio.moviecatalogue.data.Movie
+import id.nerdstudio.moviecatalogue.data.entity.Movie
+import id.nerdstudio.moviecatalogue.data.entity.Type
 import id.nerdstudio.moviecatalogue.ui.detail.DetailActivity
 import id.nerdstudio.moviecatalogue.ui.detail.DetailActivity.Companion.ARG_ID
 import id.nerdstudio.moviecatalogue.ui.detail.DetailActivity.Companion.ARG_TYPE
-import id.nerdstudio.moviecatalogue.data.Type
 import kotlinx.android.synthetic.main.item_movie_similar.view.*
 
 class SimilarAdapter(

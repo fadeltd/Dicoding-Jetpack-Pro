@@ -1,10 +1,15 @@
-package id.nerdstudio.moviecatalogue.data
+package id.nerdstudio.moviecatalogue.data.entity
 
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import java.util.Arrays
 
+@Entity(tableName = "favorite_tv_shows")
 @Parcelize
 data class TvShow(
     @SerializedName("original_name")
@@ -25,6 +30,8 @@ data class TvShow(
     override val backdropPath: String,
     @SerializedName("original_language")
     override val originalLanguage: String? = null,
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     @SerializedName("id")
     override val id: Long = 0L,
     @SerializedName("vote_average")
@@ -47,8 +54,10 @@ data class TvShow(
     val languages: Array<String> = emptyArray(),
     @SerializedName("last_air_date")
     val lastAirDate: String? = null,
+    @Embedded(prefix = "last_ep_")
     @SerializedName(" last_episode_to_air")
     val lastEpisodeToAir: Episode? = null,
+    @Embedded(prefix = "next_ep_")
     @SerializedName("next_episode_to_air")
     val nextEpisodeToAir: Episode? = null,
     @SerializedName("networks")
@@ -65,7 +74,7 @@ data class TvShow(
     override val status: String? = null,
     @SerializedName("type")
     val type: String? = null
-) : Show(), Parcelable {
+) : Catalogue(), Parcelable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other?.javaClass != javaClass) return false

@@ -1,23 +1,23 @@
-package id.nerdstudio.moviecatalogue.data
+package id.nerdstudio.moviecatalogue.data.entity
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Crew(
+data class Cast(
+    @SerializedName("character")
+    val character: String = "",
     @SerializedName("credit_id")
-    override val creditId: String?,
-    @SerializedName("department")
-    val department: String? = null,
+    override val creditId: String? = null,
     @SerializedName("id")
     override val id: Long,
     @SerializedName("name")
     override val name: String,
     @SerializedName("gender")
     override val gender: Int,
-    @SerializedName("job")
-    val job: String? = null,
     @SerializedName("profile_path")
-    override val profilePath: String?
+    override val profilePath: String?,
+    @SerializedName("order")
+    val order: Int = 0
 ) : Credit(), Parcelable

@@ -1,8 +1,8 @@
 package id.nerdstudio.moviecatalogue.data.source
 
 import androidx.lifecycle.LiveData
-import id.nerdstudio.moviecatalogue.data.Item
-import id.nerdstudio.moviecatalogue.data.Type
+import id.nerdstudio.moviecatalogue.data.entity.Item
+import id.nerdstudio.moviecatalogue.data.entity.Type
 
 interface ItemDataSource {
 

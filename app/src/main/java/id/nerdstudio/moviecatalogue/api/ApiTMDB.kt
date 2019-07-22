@@ -3,11 +3,11 @@ package id.nerdstudio.moviecatalogue.api
 import id.nerdstudio.moviecatalogue.config.AppConfig
 import id.nerdstudio.moviecatalogue.config.AppConfig.getCredits
 import id.nerdstudio.moviecatalogue.config.AppConfig.getDetail
-import id.nerdstudio.moviecatalogue.data.*
+import id.nerdstudio.moviecatalogue.data.entity.*
 import id.nerdstudio.moviecatalogue.util.safe
 import id.nerdstudio.moviecatalogue.util.toObject
 
-class ApiMovieDb(private val loader: ApiLoader) {
+class ApiTMDB(private val loader: ApiLoader) {
 
     private fun loadList(
         url: String,
@@ -23,7 +23,7 @@ class ApiMovieDb(private val loader: ApiLoader) {
                 for (i in 0 until items.size()) {
                     val obj = items[i].asJsonObject
                     val item = if (type == Type.MOVIE) obj.toObject<Movie>() else obj.toObject<TvShow>()
-                    list += item
+                    list = list + item
                 }
                 onSuccess?.invoke(list)
             } else {
@@ -103,7 +103,7 @@ class ApiMovieDb(private val loader: ApiLoader) {
                     for (i in 0 until castResponse.size()) {
 
                         val item = castResponse[i].asJsonObject.toObject<Cast>()
-                        castList += item
+                        castList = castList + item
                     }
                 }
                 var crewList = listOf<Crew>()
@@ -111,7 +111,7 @@ class ApiMovieDb(private val loader: ApiLoader) {
                     val crewResponse = result["crew"].asJsonArray
                     for (i in 0 until crewResponse.size()) {
                         val item = crewResponse[i].asJsonObject.toObject<Crew>()
-                        crewList += item
+                        crewList = crewList + item
                     }
                 }
                 onSuccess?.invoke(castList, crewList)

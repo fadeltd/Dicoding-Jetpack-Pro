@@ -1,16 +1,15 @@
 package id.nerdstudio.moviecatalogue.data.source.local
 
 import android.os.Handler
-import id.nerdstudio.moviecatalogue.data.Item
-import id.nerdstudio.moviecatalogue.data.Type
+import id.nerdstudio.moviecatalogue.data.entity.Item
+import id.nerdstudio.moviecatalogue.data.entity.Type
 import id.nerdstudio.moviecatalogue.util.EspressoIdlingResource
 import id.nerdstudio.moviecatalogue.util.JsonUtils
 
 class LocalRepository private constructor(private val jsonUtils: JsonUtils) {
     fun getAllItems(
         type: Type,
-        onReceived: ((itemResponses: List<Item>) -> Unit)? = null //,
-//        onDataNotAvailable: (() -> Unit)? = null
+        onReceived: ((itemResponses: List<Item>) -> Unit)? = null
     ) {
         EspressoIdlingResource.increment()
         val handler = Handler()

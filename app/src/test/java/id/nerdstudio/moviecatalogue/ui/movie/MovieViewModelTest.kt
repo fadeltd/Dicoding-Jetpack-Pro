@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import id.nerdstudio.moviecatalogue.data.Item
-import id.nerdstudio.moviecatalogue.data.source.ItemRepository
+import id.nerdstudio.moviecatalogue.data.entity.Item
+import id.nerdstudio.moviecatalogue.data.source.CatalogueRepository
 import id.nerdstudio.moviecatalogue.util.Dummy
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -23,7 +23,7 @@ class MovieViewModelTest {
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var viewModel: MovieViewModel
-    private val itemRepository = mock(ItemRepository::class.java)
+    private val itemRepository = mock(CatalogueRepository::class.java)
 
     @Before
     fun setUp() {

@@ -1,6 +1,6 @@
-package id.nerdstudio.moviecatalogue.data
+package id.nerdstudio.moviecatalogue.data.entity
 
-abstract class Show {
+abstract class Catalogue {
     abstract val id: Long
     abstract val voteAverage: Float
     abstract val popularity: Float

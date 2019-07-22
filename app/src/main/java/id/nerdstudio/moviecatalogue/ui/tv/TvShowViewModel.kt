@@ -2,12 +2,12 @@ package id.nerdstudio.moviecatalogue.ui.tv
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import id.nerdstudio.moviecatalogue.data.Item
-import id.nerdstudio.moviecatalogue.data.source.ItemRepository
+import id.nerdstudio.moviecatalogue.data.entity.Item
+import id.nerdstudio.moviecatalogue.data.source.CatalogueRepository
 
-class TvShowViewModel(private val itemRepository: ItemRepository) : ViewModel() {
+class TvShowViewModel(private val catalogueRepository: CatalogueRepository) : ViewModel() {
 
     fun getTvShows(): LiveData<List<Item>> {
-        return itemRepository.getAllTvShows()
+        return catalogueRepository.getAllTvShows()
     }
 }

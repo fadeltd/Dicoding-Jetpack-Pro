@@ -4,9 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.mock
-import id.nerdstudio.moviecatalogue.data.Item
-import id.nerdstudio.moviecatalogue.data.Type
-import id.nerdstudio.moviecatalogue.data.source.ItemRepository
+import id.nerdstudio.moviecatalogue.data.entity.Item
+import id.nerdstudio.moviecatalogue.data.entity.Type
+import id.nerdstudio.moviecatalogue.data.source.CatalogueRepository
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -21,7 +21,7 @@ class DetailViewModelTest {
     @JvmField
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val itemRepository = mock(ItemRepository::class.java)
+    private val itemRepository = mock(CatalogueRepository::class.java)
 
     private lateinit var viewModelMovie: DetailViewModel
     private lateinit var typeMovie: Type

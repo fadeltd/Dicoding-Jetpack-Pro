@@ -15,4 +15,6 @@
     <string name="cast">Cast</string>
     <string name="genres">Genres</string>
     <string name="similar_movies">Similar Movies</string>
+    <string name="home">Home</string>
+    <string name="favorite">Favorite</string>
 </resources>
