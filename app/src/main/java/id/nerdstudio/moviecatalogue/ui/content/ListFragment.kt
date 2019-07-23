@@ -45,7 +45,6 @@ class ListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        println(pageType.type)
         activity?.let {
             val factory = ViewModelFactory.getInstance(ApiLoader(this), it.application)
             val viewModel = ViewModelProviders.of(this, factory)
@@ -58,11 +57,10 @@ class ListFragment : Fragment() {
                         else FavoriteTvShowViewModel::class.java
                     }
                 )
-
             if (pageType == PageType.HOME) {
                 when (viewModel) {
-                    is MovieViewModel -> viewModel.getMoviesRemote().observe(this, ::notifyMovie)
-//                    is MovieViewModel -> viewModel.getMovies().observe(this, ::notifyData)
+//                    is MovieViewModel -> viewModel.getMoviesRemote().observe(this, ::notifyMovie)
+                    is MovieViewModel -> viewModel.getMovies().observe(this, ::notifyData)
                     is TvShowViewModel -> viewModel.getTvShows().observe(this, ::notifyData)
                 }
             } else {
