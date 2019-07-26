@@ -56,7 +56,7 @@ class SimilarAdapter(
                     context.startActivity(
                         Intent(context, DetailActivity::class.java)
                             .putExtra(ARG_ID, movie.id)
-                            .putExtra(ARG_TYPE, Type.MOVIE.ordinal)
+                            .putExtra(ARG_TYPE, Type.MOVIE)
                     )
                 }
             }

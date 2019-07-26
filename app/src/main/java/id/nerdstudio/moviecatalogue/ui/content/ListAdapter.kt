@@ -46,7 +46,8 @@ class ListAdapter(private val context: Context, private val type: Type) :
         return when {
             ::movieData.isInitialized -> movieData.size
             ::tvShowData.isInitialized -> tvShowData.size
-            else -> data.size
+            ::data.isInitialized -> data.size
+            else -> 0
         }
     }
 
@@ -88,7 +89,7 @@ class ListAdapter(private val context: Context, private val type: Type) :
                     context.startActivity(
                         Intent(context, DetailActivity::class.java)
                             .putExtra(DetailActivity.ARG_ID, item.id)
-                            .putExtra(DetailActivity.ARG_TYPE, type.ordinal)
+                            .putExtra(DetailActivity.ARG_TYPE, type)
                     )
                 }
             }
@@ -123,7 +124,7 @@ class ListAdapter(private val context: Context, private val type: Type) :
                     context.startActivity(
                         Intent(context, DetailActivity::class.java)
                             .putExtra(DetailActivity.ARG_ID, item.id)
-                            .putExtra(DetailActivity.ARG_TYPE, type.ordinal)
+                            .putExtra(DetailActivity.ARG_TYPE, type)
                     )
                 }
             }
@@ -141,7 +142,7 @@ class ListAdapter(private val context: Context, private val type: Type) :
                     context.startActivity(
                         Intent(context, DetailActivity::class.java)
                             .putExtra(DetailActivity.ARG_ID, item.id)
-                            .putExtra(DetailActivity.ARG_TYPE, type.ordinal)
+                            .putExtra(DetailActivity.ARG_TYPE, type)
                     )
                 }
             }

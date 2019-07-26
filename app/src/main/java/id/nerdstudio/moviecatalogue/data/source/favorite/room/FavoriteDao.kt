@@ -18,11 +18,11 @@ interface FavoriteDao {
     @get:Query("SELECT * FROM favorite_tv_shows")
     val favoriteTvShowsPaged: DataSource.Factory<Int, TvShow>
 
-    @Query("SELECT * FROM favorite_movies WHERE id = :id")
-    fun isFavoriteMovie(id: Long): LiveData<Movie>
+    @Query("SELECT COUNT(id) FROM favorite_movies WHERE id = :id")
+    fun countFavoriteMovie(id: Long): Int
 
-    @Query("SELECT * FROM favorite_tv_shows WHERE id = :id")
-    fun isFavoriteTvShow(id: Long): LiveData<TvShow>
+    @Query("SELECT COUNT(id) FROM favorite_tv_shows WHERE id = :id")
+    fun countFavoriteTvShow(id: Long): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertFavorite(movie: Movie): Long

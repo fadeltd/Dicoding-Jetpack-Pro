@@ -15,7 +15,7 @@ class MainFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            pageType = PageType.values()[it.getInt(ARG_TYPE)]
+            pageType = it.get(ARG_TYPE) as PageType
         }
     }
 
@@ -54,7 +54,7 @@ class MainFragment : Fragment() {
         @JvmStatic
         fun newInstance(type: PageType) = MainFragment().apply {
             arguments = Bundle().apply {
-                putInt(ARG_TYPE, type.ordinal)
+                putSerializable(ARG_TYPE, type)
             }
         }
     }

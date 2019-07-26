@@ -145,11 +145,21 @@ class CatalogueRepository(
 
     //region Favorites
     fun insertFavoriteMovie(movie: Movie) {
-        favoriteRepository.insertFavoriteMovie(movie)
+        val runnable = { favoriteRepository.insertFavoriteMovie(movie) }
+        appExecutors.diskIO().execute(runnable)
     }
 
     fun insertFavoriteTvShow(tvShow: TvShow) {
-        favoriteRepository.insertFavoriteTvShow(tvShow)
+        val runnable = { favoriteRepository.insertFavoriteTvShow(tvShow) }
+        appExecutors.diskIO().execute(runnable)
+    }
+
+    fun isFavoriteMovie(id: Long): Boolean {
+        return favoriteRepository.isFavoriteMovie(id)
+    }
+
+    fun isFavoriteTvShow(id: Long): Boolean {
+        return favoriteRepository.isFavoriteTvShow(id)
     }
 
     fun getFavoriteMovies(): LiveData<PagedList<Movie>> {

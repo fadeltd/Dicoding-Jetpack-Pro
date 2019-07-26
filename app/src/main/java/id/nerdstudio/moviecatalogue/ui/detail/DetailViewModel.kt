@@ -29,6 +29,14 @@ class DetailViewModel(private val catalogueRepository: CatalogueRepository) : Vi
         return catalogueRepository.getMovieSimilar(id)
     }
 
+    fun isFavoriteMovie(id: Long): Boolean {
+        return catalogueRepository.isFavoriteMovie(id)
+    }
+
+    fun isFavoriteTvShow(id: Long): Boolean {
+        return catalogueRepository.isFavoriteTvShow(id)
+    }
+
     fun addToFavorite(movie: Movie) {
          catalogueRepository.insertFavoriteMovie(movie)
     }

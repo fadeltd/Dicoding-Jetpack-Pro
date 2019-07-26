@@ -31,8 +31,8 @@ class ListFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            type = Type.values()[it.getInt(ARG_TYPE)]
-            pageType = PageType.values()[it.getInt(ARG_TYPE)]
+            type = it.getSerializable(ARG_TYPE) as Type
+            pageType = it.getSerializable(ARG_PAGE_TYPE) as PageType
         }
     }
 
@@ -112,9 +112,11 @@ class ListFragment : Fragment() {
     }
 
     private fun showLoading() {
-        recycler_view.visibility = View.GONE
-        shimmer_loading.startShimmerAnimation()
-        shimmer_loading.visibility = View.VISIBLE
+        if (recycler_view.adapter?.itemCount == 0) {
+            recycler_view.visibility = View.GONE
+            shimmer_loading.startShimmerAnimation()
+            shimmer_loading.visibility = View.VISIBLE
+        }
     }
 
     private fun hideLoading() {
@@ -131,8 +133,8 @@ class ListFragment : Fragment() {
         fun newInstance(type: Type, pageType: PageType) =
             ListFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(ARG_TYPE, type.ordinal)
-                    putInt(ARG_PAGE_TYPE, pageType.ordinal)
+                    putSerializable(ARG_TYPE, type)
+                    putSerializable(ARG_PAGE_TYPE, pageType)
                 }
             }
     }

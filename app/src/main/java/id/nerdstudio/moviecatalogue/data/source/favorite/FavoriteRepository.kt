@@ -11,9 +11,9 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
 
     fun getFavoriteTvShowsPaged(): DataSource.Factory<Int, TvShow> = favoriteDao.favoriteTvShowsPaged
 
-    fun isFavoriteMovie(id: Long): LiveData<Movie> = favoriteDao.isFavoriteMovie(id)
+    fun isFavoriteMovie(id: Long): Boolean = favoriteDao.countFavoriteMovie(id) > 0
 
-    fun isFavoriteTvShow(id: Long): LiveData<TvShow> = favoriteDao.isFavoriteTvShow(id)
+    fun isFavoriteTvShow(id: Long): Boolean = favoriteDao.countFavoriteTvShow(id) > 0
 
     fun insertFavoriteMovie(movie: Movie) {
         favoriteDao.insertFavorite(movie)

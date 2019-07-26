@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,8 @@ import kotlinx.android.synthetic.main.shimmer_cast.*
 import kotlinx.android.synthetic.main.shimmer_genre.*
 import kotlinx.android.synthetic.main.shimmer_movie_detail.*
 import kotlinx.android.synthetic.main.shimmer_movie_similar.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.text.NumberFormat
 import java.util.*
 
@@ -35,6 +38,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var type: Type
     private lateinit var movie: Movie
     private lateinit var tvShow: TvShow
+    private var menu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +53,7 @@ class DetailActivity : AppCompatActivity() {
 
         intent.extras?.let {
             val id = it.getLong(ARG_ID)
-            type = Type.values()[it.getInt(ARG_TYPE)]
+            type = it.getSerializable(ARG_TYPE) as Type
             viewModel.id = id
             viewModel.type = type
             if (type == Type.MOVIE) {
@@ -79,8 +83,9 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun populateMovie(movie: Movie) {
-        movie.run {
+    private fun populateMovie(movie_: Movie) {
+        movie_.run {
+            movie = this
             var year = ""
             if (!releaseDate.isNullOrEmpty()) {
                 year = "(${releaseDate.parseDate().year})"
@@ -115,6 +120,7 @@ class DetailActivity : AppCompatActivity() {
             }
 
             hideLoading(shimmer_loading_movie_detail, loading_movie_detail_layout, movie_detail_layout)
+            setFavoriteState(viewModel.isFavoriteMovie(id))
         }
     }
 
@@ -167,6 +173,10 @@ class DetailActivity : AppCompatActivity() {
             movie_description.text = overview
 
             hideLoading(shimmer_loading_movie_detail, loading_movie_detail_layout, movie_detail_layout)
+
+//            setFavoriteState(withContext(Dispatchers.IO) {
+//                viewModel.isFavoriteTvShow(id)
+//            })
         }
     }
 
@@ -188,10 +198,22 @@ class DetailActivity : AppCompatActivity() {
         super.onPause()
     }
 
+    private fun setFavoriteState(state: Boolean) {
+        menu?.let {
+            it.findItem(R.id.nav_favorite).icon = ContextCompat.getDrawable(
+                this, if (state) {
+                    R.drawable.ic_heart_empty
+                } else {
+                    R.drawable.ic_heart_full
+                }
+            )
+        }
+    }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_favorite, menu)
-        return super.onCreateOptionsMenu(menu)
+    override fun onCreateOptionsMenu(_menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_favorite, _menu)
+        menu = _menu
+        return super.onCreateOptionsMenu(_menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

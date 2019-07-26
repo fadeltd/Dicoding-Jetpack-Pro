@@ -3,7 +3,7 @@ package id.nerdstudio.moviecatalogue.data.entity
 import com.google.gson.annotations.SerializedName
 
 data class Item(
-    @SerializedName("id") val id: Long? = 0,
+    @SerializedName("id") val id: Long = 0,
     @SerializedName("vote_average") val voteAverage: Float = 0F,
     @SerializedName("title") val title: String? = null,
     @SerializedName("poster_path") val posterPath: String? = null,
