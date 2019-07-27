@@ -4,7 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.mock
-import id.nerdstudio.moviecatalogue.data.entity.Item
+import id.nerdstudio.moviecatalogue.data.entity.Movie
+import id.nerdstudio.moviecatalogue.data.entity.TvShow
 import id.nerdstudio.moviecatalogue.data.entity.Type
 import id.nerdstudio.moviecatalogue.data.source.CatalogueRepository
 import org.junit.After
@@ -25,17 +26,17 @@ class DetailViewModelTest {
 
     private lateinit var viewModelMovie: DetailViewModel
     private lateinit var typeMovie: Type
-    private lateinit var mockMovie: Item
+    private lateinit var mockMovie: Movie
 
     private lateinit var viewModelTvShow: DetailViewModel
     private lateinit var typeTvShow: Type
-    private lateinit var mockTvShow: Item
+    private lateinit var mockTvShow: TvShow
 
     @Before
     fun setUp() {
         viewModelMovie = DetailViewModel(itemRepository)
         typeMovie = Type.MOVIE
-        mockMovie = Item(
+        mockMovie = Movie(
             id = 332562,
             voteAverage = 7.5F,
             title = "A Star Is Born",
@@ -46,12 +47,12 @@ class DetailViewModelTest {
 
         viewModelTvShow = DetailViewModel(itemRepository)
         typeTvShow = Type.TV_SHOW
-        mockTvShow = Item(
+        mockTvShow = TvShow(
             id = 1402,
-            title = "The Walking Dead",
+            name = "The Walking Dead",
             voteAverage = 7.26F,
             posterPath = "tv_the_walking_dead",
-            releaseDate = "2010-10-31",
+            firstAirDate = "2010-10-31",
             overview = "Sheriff's deputy Rick Grimes awakens from a coma to find a post-apocalyptic world dominated by flesh-eating zombies. He sets out to find his family and encounters many other survivors along the way."
         )
     }
@@ -62,19 +63,19 @@ class DetailViewModelTest {
 
     @Test
     fun getItemMovie() {
-        val movieData = MutableLiveData<Item>()
+        val movieData = MutableLiveData<Movie>()
         movieData.value = mockMovie
 
-        val id = mockMovie.id ?: 0L
+        val id = mockMovie.id
         viewModelMovie.id = id
         viewModelMovie.type = typeMovie
 
-        `when`(itemRepository.getContent(id, typeMovie)).thenReturn(movieData)
+        `when`(itemRepository.getMovieContent(id)).thenReturn(movieData)
 
-        val observer: Observer<Item> = mock()
-        viewModelMovie.getItem()?.observeForever(observer)
+        val observer: Observer<Movie> = mock()
+        viewModelMovie.getMovieContent().observeForever(observer)
 
-        val movie = viewModelMovie.getItem()?.value
+        val movie = viewModelMovie.getMovieContent().value
         assertNotNull(movie)
         assertEquals(mockMovie.id, movie?.id)
         assertEquals(mockMovie.voteAverage, movie?.voteAverage)
@@ -86,25 +87,25 @@ class DetailViewModelTest {
 
     @Test
     fun getItemTvShow() {
-        val tvShowData = MutableLiveData<Item>()
+        val tvShowData = MutableLiveData<TvShow>()
         tvShowData.value = mockTvShow
 
-        val id = mockTvShow.id ?: 0L
+        val id = mockTvShow.id
         viewModelTvShow.id = id
         viewModelTvShow.type = typeTvShow
 
-        `when`(itemRepository.getContent(id, typeTvShow)).thenReturn(tvShowData)
+        `when`(itemRepository.getTvShowContent(id)).thenReturn(tvShowData)
 
-        val observer: Observer<Item> = mock()
-        viewModelTvShow.getItem()?.observeForever(observer)
+        val observer: Observer<TvShow> = mock()
+        viewModelTvShow.getTvShowContent().observeForever(observer)
 
-        val tvShow = viewModelTvShow.getItem()?.value
+        val tvShow = viewModelTvShow.getTvShowContent().value
         assertNotNull(tvShow)
         assertEquals(mockTvShow.id, tvShow?.id)
         assertEquals(mockTvShow.voteAverage, tvShow?.voteAverage)
-        assertEquals(mockTvShow.title, tvShow?.title)
+        assertEquals(mockTvShow.name, tvShow?.name)
         assertEquals(mockTvShow.posterPath, tvShow?.posterPath)
         assertEquals(mockTvShow.overview, tvShow?.overview)
-        assertEquals(mockTvShow.releaseDate, tvShow?.releaseDate)
+        assertEquals(mockTvShow.firstAirDate, tvShow?.firstAirDate)
     }
 }

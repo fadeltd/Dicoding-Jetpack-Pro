@@ -2,10 +2,12 @@ package id.nerdstudio.moviecatalogue.data.source
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.*
-import id.nerdstudio.moviecatalogue.data.entity.Item
-import id.nerdstudio.moviecatalogue.data.entity.Type
-import id.nerdstudio.moviecatalogue.data.source.remote.RemoteRepository
+import id.nerdstudio.moviecatalogue.data.entity.Movie
+import id.nerdstudio.moviecatalogue.data.entity.TvShow
+import id.nerdstudio.moviecatalogue.data.source.favorite.FavoriteRepository
 import id.nerdstudio.moviecatalogue.data.source.local.LocalRepository
+import id.nerdstudio.moviecatalogue.data.source.remote.RemoteRepository
+import id.nerdstudio.moviecatalogue.util.AppExecutors
 import id.nerdstudio.moviecatalogue.util.Dummy
 import id.nerdstudio.moviecatalogue.util.getData
 import org.junit.After
@@ -21,7 +23,9 @@ class MovieRepositoryTest {
 
     private val local: LocalRepository = mock()
     private val remote: RemoteRepository = mock()
-    private val itemRepository = CatalogueRepository(local, remote)
+    private val favorite: FavoriteRepository = mock()
+    private val appExecutor: AppExecutors = mock()
+    private val itemRepository = CatalogueRepository(local, remote, favorite, appExecutor)
 
     private val movies = Dummy.dummyMovies()
     private val movieId = movies[0].id
@@ -40,17 +44,16 @@ class MovieRepositoryTest {
 
     @Test
     fun getAllMovies() {
-        val type = Type.MOVIE
-        whenever(local.getAllItems(eq(type), any())).thenAnswer {
-            val callback = it.getArgument<((movies: List<Item>) -> Unit)>(1)
+        whenever(local.getAllMovies(any())).thenAnswer {
+            val callback = it.getArgument<((movies: List<Movie>) -> Unit)>(0)
             callback.invoke(movies)
         }
         val result = itemRepository.getAllMovies().value
         assertEquals(movies.size, result?.size)
 
-        val onReceivedMock: (List<Item>) -> Unit = mock()
-        local.getAllItems(type, onReceivedMock)
-        argumentCaptor<List<Item>>().apply {
+        val onReceivedMock: (List<Movie>) -> Unit = mock()
+        local.getAllMovies(onReceivedMock)
+        argumentCaptor<List<Movie>>().apply {
             verify(onReceivedMock, times(1)).invoke(capture())
             assertEquals(movies, firstValue)
         }
@@ -58,17 +61,16 @@ class MovieRepositoryTest {
 
     @Test
     fun getAllTvShows() {
-        val type = Type.TV_SHOW
-        whenever(local.getAllItems(eq(type), any())).thenAnswer {
-            val callback = it.getArgument<((tvShows: List<Item>) -> Unit)>(1)
+        whenever(local.getAllTvShow(any())).thenAnswer {
+            val callback = it.getArgument<((tvShows: List<TvShow>) -> Unit)>(0)
             callback.invoke(tvShows)
         }
         val result = itemRepository.getAllTvShows().value
         assertEquals(tvShows.size, result?.size)
 
-        val onReceivedMock: (List<Item>) -> Unit = mock()
-        local.getAllItems(type, onReceivedMock)
-        argumentCaptor<List<Item>>().apply {
+        val onReceivedMock: (List<TvShow>) -> Unit = mock()
+        local.getAllTvShow(onReceivedMock)
+        argumentCaptor<List<TvShow>>().apply {
             verify(onReceivedMock, times(1)).invoke(capture())
             assertEquals(tvShows, firstValue)
         }
@@ -76,29 +78,23 @@ class MovieRepositoryTest {
 
     @Test
     fun getMovieContent() {
-        val id = movieId ?: 0
-        val type = id.nerdstudio.moviecatalogue.data.entity.Type.MOVIE
-
-        whenever(local.getAllItems(eq(type), any())).thenAnswer {
-            val callback = it.getArgument<((tvShows: List<Item>) -> Unit)>(1)
+        val id = movieId
+        whenever(local.getAllMovies(any())).thenAnswer {
+            val callback = it.getArgument<((tvShows: List<Movie>) -> Unit)>(0)
             callback.invoke(movies)
         }
-        val result = itemRepository.getContent(id, type).getData()
+        val result = itemRepository.getMovieContent(id).getData()
         assertEquals(movies[0], result)
     }
 
-    @Suppress("UNCHECKED_CAST")
     @Test
     fun getTvShowContent() {
-        val id = tvShowId ?: 0
-        val type = id.nerdstudio.moviecatalogue.data.entity.Type.TV_SHOW
-
-        whenever(local.getAllItems(eq(type), any())).thenAnswer {
-            val callback = it.arguments[1]
-            val completion = callback as ((tvShows: List<Item>?) -> Unit)
-            completion.invoke(tvShows)
+        val id = tvShowId
+        whenever(local.getAllTvShow(any())).thenAnswer {
+            val callback = it.getArgument<((tvShows: List<TvShow>?) -> Unit)>(0)
+            callback.invoke(tvShows)
         }
-        val result = itemRepository.getContent(id, type).getData()
+        val result = itemRepository.getTvShowContent(id).getData()
         assertEquals(tvShows[0], result)
     }
 }

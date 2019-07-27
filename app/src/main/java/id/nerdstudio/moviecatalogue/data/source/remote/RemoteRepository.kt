@@ -2,11 +2,7 @@ package id.nerdstudio.moviecatalogue.data.source.remote
 
 import id.nerdstudio.moviecatalogue.api.ApiLoader
 import id.nerdstudio.moviecatalogue.api.ApiTMDB
-import id.nerdstudio.moviecatalogue.data.entity.Cast
-import id.nerdstudio.moviecatalogue.data.entity.Movie
-import id.nerdstudio.moviecatalogue.data.entity.TvShow
-import id.nerdstudio.moviecatalogue.data.entity.Type
-import id.nerdstudio.moviecatalogue.data.entity.Crew
+import id.nerdstudio.moviecatalogue.data.entity.*
 import id.nerdstudio.moviecatalogue.util.EspressoIdlingResource
 
 class RemoteRepository(private val loader: ApiLoader) {
@@ -60,7 +56,7 @@ class RemoteRepository(private val loader: ApiLoader) {
         onComplete: (() -> Unit)? = null,
         onSuccess: ((castList: List<Cast>, crewList: List<Crew>) -> Unit)? = null,
         onFailed: ((message: String) -> Unit)? = null
-    ){
+    ) {
         EspressoIdlingResource.increment()
         apiMovieDb.loadCredits(type, id, {
             EspressoIdlingResource.decrement()
@@ -74,7 +70,7 @@ class RemoteRepository(private val loader: ApiLoader) {
         onComplete: (() -> Unit)? = null,
         onSuccess: ((shows: List<*>) -> Unit)? = null,
         onFailed: ((message: String) -> Unit)? = null
-    ){
+    ) {
         EspressoIdlingResource.increment()
         apiMovieDb.loadSimilar(type, id, {
             EspressoIdlingResource.decrement()

@@ -20,6 +20,7 @@ import id.nerdstudio.moviecatalogue.data.entity.*
 import id.nerdstudio.moviecatalogue.ui.detail.cast.CastAdapter
 import id.nerdstudio.moviecatalogue.ui.detail.genre.GenreAdapter
 import id.nerdstudio.moviecatalogue.ui.detail.similar.SimilarAdapter
+import id.nerdstudio.moviecatalogue.ui.main.PageType
 import id.nerdstudio.moviecatalogue.util.*
 import id.nerdstudio.moviecatalogue.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_detail.*
@@ -28,6 +29,8 @@ import kotlinx.android.synthetic.main.shimmer_genre.*
 import kotlinx.android.synthetic.main.shimmer_movie_detail.*
 import kotlinx.android.synthetic.main.shimmer_movie_similar.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.NumberFormat
 import java.util.*
@@ -36,6 +39,7 @@ class DetailActivity : AppCompatActivity() {
 
     private lateinit var viewModel: DetailViewModel
     private lateinit var type: Type
+    private lateinit var pageType: PageType
     private lateinit var movie: Movie
     private lateinit var tvShow: TvShow
     private var menu: Menu? = null
@@ -54,73 +58,122 @@ class DetailActivity : AppCompatActivity() {
         intent.extras?.let {
             val id = it.getLong(ARG_ID)
             type = it.getSerializable(ARG_TYPE) as Type
+            pageType = it.getSerializable(ARG_PAGE_TYPE) as PageType
             viewModel.id = id
             viewModel.type = type
-            if (type == Type.MOVIE) {
+
+            if (pageType == PageType.TEST) {
+                if (type == Type.MOVIE) {
+                    viewModel.getMovieContent().observe(this) { catalogue ->
+                        populate(catalogue)
+                    }
+                } else {
+                    viewModel.getTvShowContent().observe(this) { catalogue ->
+                        populate(catalogue)
+                    }
+                }
+            } else {
+                showLoading(shimmer_loading_cast, loading_cast_layout, movie_cast_layout)
+                viewModel.getCast(type).observe(this) { cast ->
+                    populateCast(cast)
+                }
+                showLoading(shimmer_loading_movie_similar, loading_movie_similar_layout, movie_similar_layout)
+                if (type == Type.MOVIE) {
+                    viewModel.getSimilarMovies().observe(this) { catalogue ->
+                        populateSimilar(catalogue)
+                    }
+                } else {
+                    viewModel.getSimilarTvShows().observe(this) { catalogue ->
+                        populateSimilar(catalogue)
+                    }
+                }
+
                 val layout = shimmer_loading_movie_detail.getChildAt(0) as LinearLayout
                 for (i in 0 until layout.childCount) {
                     layout.getChildAt(i).visibility = View.VISIBLE
                 }
                 showLoading(shimmer_loading_movie_detail, loading_movie_detail_layout, movie_detail_layout)
                 showLoading(shimmer_loading_genre, loading_genre_layout, movie_genres_layout)
-                viewModel.getMovieDetail().observe(this) { movie ->
-                    populateMovie(movie)
-                    populateGenre(movie.genres.asList())
-                }
-                showLoading(shimmer_loading_cast, loading_cast_layout, movie_cast_layout)
-                viewModel.getMovieCast().observe(this) { cast ->
-                    populateCast(cast)
-                }
-                showLoading(shimmer_loading_movie_similar, loading_movie_similar_layout, movie_similar_layout)
-                viewModel.getSimilarMovies().observe(this) { movies ->
-                    populateSimilar(movies)
-                }
-            } else {
-                viewModel.getItem()?.observe(this) { item ->
-                    populateItem(item)
+                viewModel.getDetail(type).observe(this) { catalogue ->
+                    catalogue as Catalogue
+                    populate(catalogue)
+                    populateGenre(catalogue.genres.asList())
                 }
             }
         }
     }
 
-    private fun populateMovie(movie_: Movie) {
-        movie_.run {
-            movie = this
+    private fun populate(catalogue: Catalogue) {
+        catalogue.run {
             var year = ""
-            if (!releaseDate.isNullOrEmpty()) {
-                year = "(${releaseDate.parseDate().year})"
+            if (this is Movie) {
+                movie = this
+                if (!releaseDate.isNullOrEmpty()) {
+                    year = "(${releaseDate.parseDate().year})"
+                }
+                movie_release_date.text = releaseDate.toFormattedDate()
+                movie_title.text = title
+                supportActionBar?.title = "$title $year"
+            } else if (this is TvShow) {
+                tvShow = this
+                if (!firstAirDate.isNullOrEmpty()) {
+                    year = "(${firstAirDate.parseDate().year})"
+                }
+                movie_release_date.text = firstAirDate.toFormattedDate()
+                movie_title.text = name
+                supportActionBar?.title = "$title $year"
             }
-            movie_release_date.text = releaseDate.toFormattedDate()
+
             showLoading(loading_movie_poster, loading_movie_poster, movie_poster)
             posterPath?.run {
-                val url = getImageUrl(this, W500)
-                Ion.with(this@DetailActivity)
-                    .load(url)
-                    .asBitmap()
-                    .setCallback { e, result ->
-                        hideLoading(loading_movie_poster, loading_movie_poster, movie_poster)
-                        if (e == null) {
-                            movie_poster.setImageBitmap(result)
+                EspressoIdlingResource.increment()
+                if (!this.endsWith("jpg")) {
+                    movie_poster.setImagePoster(posterPath)
+                    EspressoIdlingResource.decrement()
+                    hideLoading(loading_movie_poster, loading_movie_poster, movie_poster)
+                } else {
+                    val url = getImageUrl(this, W500)
+                    Ion.with(this@DetailActivity)
+                        .load(url)
+                        .asBitmap()
+                        .setCallback { e, result ->
+                            hideLoading(loading_movie_poster, loading_movie_poster, movie_poster)
+                            if (e == null) {
+                                movie_poster.setImageBitmap(result)
+                            }
+                            EspressoIdlingResource.decrement()
                         }
-                    }
+                }
             }
-            movie_title.text = title
-            supportActionBar?.title = "$title $year"
 
             movie_description.text = overview
-
             movie_language.text = Locale(originalLanguage).displayName
-            movie_runtime.text = runtime?.toRuntime()
-            val currency = NumberFormat.getCurrencyInstance(Locale.US)
-            movie_revenue.text = currency.format(revenue)
-            movie_budget.text = currency.format(budget)
 
-            for (i in 0 until movie_detail_layout.childCount) {
-                movie_detail_layout.getChildAt(i).visibility = View.VISIBLE
+            if (this is Movie) {
+                movie_runtime.text = runtime?.toRuntime()
+                val currency = NumberFormat.getCurrencyInstance(Locale.US)
+                movie_revenue.text = currency.format(revenue)
+                movie_budget.text = currency.format(budget)
+                for (i in 0 until movie_detail_layout.childCount) {
+                    movie_detail_layout.getChildAt(i).visibility = View.VISIBLE
+                }
+            } else if (this is TvShow) {
+                if (episodeRunTime.isNotEmpty()) {
+                    movie_runtime.text = episodeRunTime[0].toRuntime()
+                    movie_runtime_label.visibility = View.VISIBLE
+                    movie_runtime.visibility = View.VISIBLE
+                }
             }
 
             hideLoading(shimmer_loading_movie_detail, loading_movie_detail_layout, movie_detail_layout)
-            setFavoriteState(viewModel.isFavoriteMovie(id))
+
+            GlobalScope.launch {
+                val state = withContext(Dispatchers.IO) {
+                    viewModel.isFavoriteMovie(id)
+                }
+                println("$id $state")
+                setFavoriteState(state)
+            }
         }
     }
 
@@ -136,8 +189,9 @@ class DetailActivity : AppCompatActivity() {
         hideLoading(shimmer_loading_genre, loading_genre_layout, movie_genres_layout)
     }
 
-    private fun populateSimilar(movies: List<Movie>) {
-        movie_similar.adapter = SimilarAdapter(this, movies.distinct())
+    private fun populateSimilar(catalogue: List<Catalogue>) {
+        movie_similar_label.text = "${type.value.capitalize()}s"
+        movie_similar.adapter = SimilarAdapter(this, catalogue.distinct())
         movie_similar.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         hideLoading(shimmer_loading_movie_similar, loading_movie_similar_layout, movie_similar_layout)
     }
@@ -152,32 +206,6 @@ class DetailActivity : AppCompatActivity() {
         layout.stopShimmerAnimation()
         shimmerContainer.visibility = View.GONE
         view.visibility = View.VISIBLE
-    }
-
-    private fun populateItem(item: Item) {
-        item.run {
-            var year = ""
-            if (!releaseDate.isNullOrEmpty()) {
-                year = "(${releaseDate.parseDate().year})"
-            }
-            movie_release_date.text = releaseDate.toFormattedDate()
-            // movie_rating.text = voteAverage.toString()
-
-            // showLoading(loading_movie_poster, movie_poster)
-            if (!posterPath.isNullOrEmpty()) {
-                movie_poster.setImagePoster(posterPath)
-                hideLoading(loading_movie_poster, loading_movie_poster, movie_poster)
-            }
-            movie_title.text = title
-            supportActionBar?.title = "$title $year"
-            movie_description.text = overview
-
-            hideLoading(shimmer_loading_movie_detail, loading_movie_detail_layout, movie_detail_layout)
-
-//            setFavoriteState(withContext(Dispatchers.IO) {
-//                viewModel.isFavoriteTvShow(id)
-//            })
-        }
     }
 
     override fun onResume() {
@@ -199,14 +227,16 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun setFavoriteState(state: Boolean) {
-        menu?.let {
-            it.findItem(R.id.nav_favorite).icon = ContextCompat.getDrawable(
-                this, if (state) {
-                    R.drawable.ic_heart_empty
-                } else {
-                    R.drawable.ic_heart_full
-                }
-            )
+        runOnUiThread {
+            menu?.let {
+                it.findItem(R.id.menu_favorite).icon = ContextCompat.getDrawable(
+                    this, if (state) {
+                        R.drawable.ic_heart_full
+                    } else {
+                        R.drawable.ic_heart_empty
+                    }
+                )
+            }
         }
     }
 
@@ -223,10 +253,26 @@ class DetailActivity : AppCompatActivity() {
                 true
             }
             R.id.menu_favorite -> {
-                if (type == Type.MOVIE) {
-                    viewModel.addToFavorite(movie)
-                } else {
-                    viewModel.addToFavorite(tvShow)
+                GlobalScope.launch {
+                    withContext(Dispatchers.IO) {
+                        var state = false
+                        if (::movie.isInitialized) {
+                            if (viewModel.isFavoriteMovie(movie.id)) {
+                                viewModel.removeFavoriteMovie(movie)
+                            } else {
+                                viewModel.addToFavorite(movie)
+                                state = true
+                            }
+                        } else if (::tvShow.isInitialized) {
+                            if (viewModel.isFavoriteTvShow(tvShow.id)) {
+                                viewModel.removeFavoriteTvShow(tvShow)
+                            } else {
+                                viewModel.addToFavorite(tvShow)
+                                state = true
+                            }
+                        }
+                        setFavoriteState(state)
+                    }
                 }
                 true
             }
@@ -237,5 +283,6 @@ class DetailActivity : AppCompatActivity() {
     companion object {
         const val ARG_ID = "id"
         const val ARG_TYPE = "type"
+        const val ARG_PAGE_TYPE = "page_type"
     }
 }

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import id.nerdstudio.moviecatalogue.data.entity.Item
+import id.nerdstudio.moviecatalogue.data.entity.TvShow
 import id.nerdstudio.moviecatalogue.data.source.CatalogueRepository
 import id.nerdstudio.moviecatalogue.util.Dummy
 import org.junit.After
@@ -36,12 +36,12 @@ class TvShowViewModelTest {
 
     @Test
     fun getTvShows() {
-        val mockTvShows = MutableLiveData<List<Item>>()
+        val mockTvShows = MutableLiveData<List<TvShow>>()
         mockTvShows.value = Dummy.dummyTvShows()
 
         `when`(itemRepository.getAllTvShows()).thenReturn(mockTvShows)
 
-        val observer: Observer<List<Item>> = mock()
+        val observer: Observer<List<TvShow>> = mock()
         viewModel.getTvShows().observeForever(observer)
 
         assertNotNull(mockTvShows.value)

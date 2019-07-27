@@ -9,24 +9,56 @@ class DetailViewModel(private val catalogueRepository: CatalogueRepository) : Vi
     var id: Long = 0
     var type: Type = Type.MOVIE
 
-    fun getItem(): LiveData<Item>? {
-        return catalogueRepository.getContent(id, type)
+    fun getMovieContent(): LiveData<Movie> {
+        return catalogueRepository.getMovieContent(id)
     }
 
-    fun getMovieDetail(): LiveData<Movie>{
-        return catalogueRepository.getMovieDetail(id)
+    fun getTvShowContent(): LiveData<TvShow> {
+        return catalogueRepository.getTvShowContent(id)
     }
 
-    fun getMovieCast(): LiveData<List<Cast>>{
-        return catalogueRepository.getMovieCast(id)
+    fun getDetail(type: Type): LiveData<*> {
+        return if (type == Type.MOVIE)
+            catalogueRepository.getMovieDetail(id)
+        else
+            catalogueRepository.getTvShowDetail(id)
     }
 
-    fun getMovieCrew() : LiveData<List<Crew>> {
-        return catalogueRepository.getMovieCrew(id)
+    fun getCast(type: Type): LiveData<List<Cast>> {
+        return if (type == Type.MOVIE)
+            catalogueRepository.getMovieCast(id)
+        else
+            catalogueRepository.getTvShowCast(id)
     }
 
-    fun getSimilarMovies() : LiveData<List<Movie>> {
+    fun getCrew(type: Type): LiveData<List<Crew>> {
+        return if (type == Type.MOVIE)
+            catalogueRepository.getMovieCrew(id)
+        else
+            catalogueRepository.getTvShowCrew(id)
+    }
+
+//    fun getSimilar(): LiveData<List<Catalogue>> {
+//        return if (type == Type.MOVIE)
+//            catalogueRepository.getMovieSimilar(id)
+//        else
+//            catalogueRepository.getTvShowSimilar(id)
+//    }
+
+    fun getSimilarMovies(): LiveData<List<Movie>> {
         return catalogueRepository.getMovieSimilar(id)
+    }
+
+    fun getSimilarTvShows(): LiveData<List<TvShow>> {
+        return catalogueRepository.getTvShowSimilar(id)
+    }
+
+    fun removeFavoriteMovie(movie: Movie) {
+        catalogueRepository.deleteFavoriteMovie(movie)
+    }
+
+    fun removeFavoriteTvShow(tvShow: TvShow) {
+        catalogueRepository.deleteFavoriteTvShow(tvShow)
     }
 
     fun isFavoriteMovie(id: Long): Boolean {
@@ -38,7 +70,7 @@ class DetailViewModel(private val catalogueRepository: CatalogueRepository) : Vi
     }
 
     fun addToFavorite(movie: Movie) {
-         catalogueRepository.insertFavoriteMovie(movie)
+        catalogueRepository.insertFavoriteMovie(movie)
     }
 
     fun addToFavorite(tvShow: TvShow) {

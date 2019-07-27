@@ -7,8 +7,8 @@ import id.nerdstudio.moviecatalogue.data.source.favorite.FavoriteRepository
 import id.nerdstudio.moviecatalogue.data.source.favorite.room.FavoriteDatabase
 import id.nerdstudio.moviecatalogue.data.source.local.LocalRepository
 import id.nerdstudio.moviecatalogue.data.source.remote.RemoteRepository
-import id.nerdstudio.moviecatalogue.util.JsonUtils
 import id.nerdstudio.moviecatalogue.util.AppExecutors
+import id.nerdstudio.moviecatalogue.util.JsonUtils
 
 object Injection {
     fun provideRepository(loader: ApiLoader, application: Application): CatalogueRepository {

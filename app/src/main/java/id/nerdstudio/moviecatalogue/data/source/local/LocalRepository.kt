@@ -1,15 +1,17 @@
 package id.nerdstudio.moviecatalogue.data.source.local
 
 import android.os.Handler
-import id.nerdstudio.moviecatalogue.data.entity.Item
+import id.nerdstudio.moviecatalogue.data.entity.Movie
+import id.nerdstudio.moviecatalogue.data.entity.TvShow
 import id.nerdstudio.moviecatalogue.data.entity.Type
 import id.nerdstudio.moviecatalogue.util.EspressoIdlingResource
 import id.nerdstudio.moviecatalogue.util.JsonUtils
 
 class LocalRepository private constructor(private val jsonUtils: JsonUtils) {
-    fun getAllItems(
+
+    private fun <T> getAllItems(
         type: Type,
-        onReceived: ((itemResponses: List<Item>) -> Unit)? = null
+        onReceived: ((itemResponses: List<T>) -> Unit)? = null
     ) {
         EspressoIdlingResource.increment()
         val handler = Handler()
@@ -17,6 +19,18 @@ class LocalRepository private constructor(private val jsonUtils: JsonUtils) {
             onReceived?.invoke(jsonUtils.loadItems(type))
             EspressoIdlingResource.decrement()
         }, SERVICE_LATENCY_IN_MILLIS)
+    }
+
+    fun getAllMovies(
+        onReceived: ((itemResponses: List<Movie>) -> Unit)? = null
+    ) {
+        getAllItems(Type.MOVIE, onReceived)
+    }
+
+    fun getAllTvShow(
+        onReceived: ((itemResponses: List<TvShow>) -> Unit)? = null
+    ) {
+        getAllItems(Type.TV_SHOW, onReceived)
     }
 
     companion object {

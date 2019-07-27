@@ -9,6 +9,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import id.nerdstudio.moviecatalogue.R
 import id.nerdstudio.moviecatalogue.data.entity.Type
+import id.nerdstudio.moviecatalogue.ui.main.PageType
 import id.nerdstudio.moviecatalogue.util.Dummy
 import id.nerdstudio.moviecatalogue.util.EspressoIdlingResource
 import id.nerdstudio.moviecatalogue.util.parseDate
@@ -30,6 +31,7 @@ class DetailActivityTest {
                 return Intent(targetContext, DetailActivity::class.java)
                     .putExtra(DetailActivity.ARG_ID, mockMovie.id)
                     .putExtra(DetailActivity.ARG_TYPE, Type.MOVIE)
+                    .putExtra(DetailActivity.ARG_PAGE_TYPE, PageType.TEST)
             }
         }
 

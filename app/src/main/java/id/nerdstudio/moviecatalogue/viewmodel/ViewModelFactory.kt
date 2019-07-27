@@ -7,8 +7,8 @@ import id.nerdstudio.moviecatalogue.api.ApiLoader
 import id.nerdstudio.moviecatalogue.data.source.CatalogueRepository
 import id.nerdstudio.moviecatalogue.di.Injection
 import id.nerdstudio.moviecatalogue.ui.detail.DetailViewModel
-import id.nerdstudio.moviecatalogue.ui.movie.FavoriteMovieViewModel
 import id.nerdstudio.moviecatalogue.ui.main.MainViewModel
+import id.nerdstudio.moviecatalogue.ui.movie.FavoriteMovieViewModel
 import id.nerdstudio.moviecatalogue.ui.movie.MovieViewModel
 import id.nerdstudio.moviecatalogue.ui.tv.FavoriteTvShowViewModel
 import id.nerdstudio.moviecatalogue.ui.tv.TvShowViewModel

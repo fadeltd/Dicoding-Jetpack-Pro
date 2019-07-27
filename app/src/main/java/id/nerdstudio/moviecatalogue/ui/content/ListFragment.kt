@@ -10,9 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import id.nerdstudio.moviecatalogue.R
 import id.nerdstudio.moviecatalogue.api.ApiLoader
-import id.nerdstudio.moviecatalogue.data.entity.Item
-import id.nerdstudio.moviecatalogue.data.entity.Movie
-import id.nerdstudio.moviecatalogue.data.entity.TvShow
+import id.nerdstudio.moviecatalogue.data.entity.Catalogue
 import id.nerdstudio.moviecatalogue.data.entity.Type
 import id.nerdstudio.moviecatalogue.ui.main.PageType
 import id.nerdstudio.moviecatalogue.ui.movie.FavoriteMovieViewModel
@@ -49,28 +47,30 @@ class ListFragment : Fragment() {
             val factory = ViewModelFactory.getInstance(ApiLoader(this), it.application)
             val viewModel = ViewModelProviders.of(this, factory)
                 .get(
-                    if (pageType == PageType.HOME) {
-                        if (type == Type.MOVIE) MovieViewModel::class.java
-                        else TvShowViewModel::class.java
-                    } else {
+                    if (pageType == PageType.FAVORITE) {
                         if (type == Type.MOVIE) FavoriteMovieViewModel::class.java
                         else FavoriteTvShowViewModel::class.java
+                    } else {
+                        if (type == Type.MOVIE) MovieViewModel::class.java
+                        else TvShowViewModel::class.java
                     }
                 )
-            if (pageType == PageType.HOME) {
-                when (viewModel) {
-//                    is MovieViewModel -> viewModel.getMoviesRemote().observe(this, ::notifyMovie)
+            when (pageType) {
+                PageType.HOME -> when (viewModel) {
+                    is MovieViewModel -> viewModel.getMoviesRemote().observe(this, ::notifyData)
+                    is TvShowViewModel -> viewModel.getTvShowsRemote().observe(this, ::notifyData)
+                }
+                PageType.FAVORITE -> when (viewModel) {
+                    is FavoriteMovieViewModel -> viewModel.getFavoriteMovies().observe(this, ::notifyData)
+                    is FavoriteTvShowViewModel -> viewModel.getFavoriteTvShows().observe(this, ::notifyData)
+                }
+                else -> when (viewModel) {
                     is MovieViewModel -> viewModel.getMovies().observe(this, ::notifyData)
                     is TvShowViewModel -> viewModel.getTvShows().observe(this, ::notifyData)
                 }
-            } else {
-                when (viewModel) {
-                    is FavoriteMovieViewModel -> viewModel.getFavoriteMovies().observe(this, ::notifyMovie)
-                    is FavoriteTvShowViewModel -> viewModel.getFavoriteTvShows().observe(this, ::notifyTvShow)
-                }
             }
 
-            val adapter = ListAdapter(it, type)
+            val adapter = ListAdapter(it, type, pageType)
             val recyclerView = recycler_view
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(it, RecyclerView.VERTICAL, false)
@@ -78,24 +78,10 @@ class ListFragment : Fragment() {
         }
     }
 
-    private fun notifyMovie(movies: List<Movie>) {
+    private fun notifyData(movies: List<Catalogue>) {
         hideLoading()
         val adapter = (recycler_view.adapter as ListAdapter)
-        adapter.setMovieData(movies)
-        adapter.notifyDataSetChanged()
-    }
-
-    private fun notifyTvShow(tvShows: List<TvShow>) {
-        hideLoading()
-        val adapter = (recycler_view.adapter as ListAdapter)
-        adapter.setTvShowData(tvShows)
-        adapter.notifyDataSetChanged()
-    }
-
-    private fun notifyData(items: List<Item>) {
-        hideLoading()
-        val adapter = (recycler_view.adapter as ListAdapter)
-        adapter.setData(items)
+        adapter.setData(movies)
         adapter.notifyDataSetChanged()
     }
 

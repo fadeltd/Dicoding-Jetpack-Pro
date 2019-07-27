@@ -1,7 +1,9 @@
 package id.nerdstudio.moviecatalogue.ui.main
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import id.nerdstudio.moviecatalogue.R
 import id.nerdstudio.moviecatalogue.ui.MainActivity
@@ -15,7 +17,7 @@ class MainFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            pageType = it.get(ARG_TYPE) as PageType
+            pageType = it.get(ARG_PAGE_TYPE) as PageType
         }
     }
 
@@ -36,7 +38,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?){
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         (activity as MainActivity).run {
             setSupportActionBar(toolbar)
@@ -44,17 +46,13 @@ class MainFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, menuInflater: MenuInflater?) {
-        menuInflater?.inflate(R.menu.menu_main, menu)
-    }
-
     companion object {
-        const val ARG_TYPE = "type"
+        const val ARG_PAGE_TYPE = "page_type"
 
         @JvmStatic
         fun newInstance(type: PageType) = MainFragment().apply {
             arguments = Bundle().apply {
-                putSerializable(ARG_TYPE, type)
+                putSerializable(ARG_PAGE_TYPE, type)
             }
         }
     }

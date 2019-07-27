@@ -4,6 +4,8 @@ import com.google.gson.JsonParser
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
+import id.nerdstudio.moviecatalogue.data.entity.Movie
+import id.nerdstudio.moviecatalogue.data.entity.TvShow
 import id.nerdstudio.moviecatalogue.data.entity.Type
 import id.nerdstudio.moviecatalogue.util.Dummy.dummyMovies
 import id.nerdstudio.moviecatalogue.util.Dummy.dummyTvShows
@@ -52,13 +54,13 @@ class JsonUtilsTest {
     fun loadItems() {
         val jsonUtils: JsonUtils = mock()
         val dummyMovies = dummyMovies()
-        whenever(jsonUtils.loadItems(eq(Type.MOVIE))).thenReturn(dummyMovies)
-        val movies = jsonUtils.loadItems(Type.MOVIE)
+        whenever(jsonUtils.loadItems<Movie>(eq(Type.MOVIE))).thenReturn(dummyMovies)
+        val movies = jsonUtils.loadItems<Movie>(Type.MOVIE)
         assertEquals(movies, dummyMovies)
 
         val dummyTvShows = dummyTvShows()
-        whenever(jsonUtils.loadItems(eq(Type.TV_SHOW))).thenReturn(dummyTvShows)
-        val tvShows = jsonUtils.loadItems(Type.TV_SHOW)
+        whenever(jsonUtils.loadItems<TvShow>(eq(Type.TV_SHOW))).thenReturn(dummyTvShows)
+        val tvShows = jsonUtils.loadItems<TvShow>(Type.TV_SHOW)
         assertEquals(dummyTvShows, tvShows)
     }
 }

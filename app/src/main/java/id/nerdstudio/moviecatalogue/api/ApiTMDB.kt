@@ -43,7 +43,6 @@ class ApiTMDB(private val loader: ApiLoader) {
     ) {
         val url = if (type == Type.MOVIE) AppConfig.getMovies() else AppConfig.getTvShows()
         loadList(url, type, onComplete, onSuccess, onFailed)
-
     }
 
     fun loadSimilar(

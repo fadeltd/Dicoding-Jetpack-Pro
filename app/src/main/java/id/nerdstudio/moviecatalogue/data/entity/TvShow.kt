@@ -7,7 +7,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
-import java.util.Arrays
+import java.util.*
 
 @Entity(tableName = "favorite_tv_shows")
 @Parcelize
@@ -27,9 +27,9 @@ data class TvShow(
     @SerializedName("first_air_date")
     val firstAirDate: String? = null,
     @SerializedName("backdrop_path")
-    override val backdropPath: String,
+    override val backdropPath: String? = null,
     @SerializedName("original_language")
-    override val originalLanguage: String? = null,
+    override val originalLanguage: String = "en",
     @PrimaryKey
     @ColumnInfo(name = "id")
     @SerializedName("id")
@@ -43,7 +43,7 @@ data class TvShow(
     @SerializedName("created_by")
     val createdBy: Array<Crew> = emptyArray(),
     @SerializedName("episode_run_time")
-    val episodeRunTime: Int = 0,
+    val episodeRunTime: IntArray = intArrayOf(),
     @SerializedName("genres")
     override val genres: Array<Genre> = emptyArray(),
     @SerializedName("homepage")

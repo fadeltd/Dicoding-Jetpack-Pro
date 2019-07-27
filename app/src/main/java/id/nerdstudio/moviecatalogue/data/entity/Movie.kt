@@ -6,7 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
-import java.util.Arrays
+import java.util.*
 
 @Entity(tableName = "favorite_movies")
 @Parcelize
@@ -14,34 +14,34 @@ data class Movie(
     @PrimaryKey
     @ColumnInfo(name = "id")
     @SerializedName("id")
-    val id: Long = 0L,
+    override val id: Long = 0L,
     @SerializedName("video")
     val video: Boolean = false,
     @ColumnInfo(name = "vote_average")
     @SerializedName("vote_average")
-    val voteAverage: Float = 0F,
+    override val voteAverage: Float = 0F,
     @ColumnInfo(name = "title")
     @SerializedName("title")
     val title: String? = null,
     @SerializedName("popularity")
-    val popularity: Float = 0F,
+    override val popularity: Float = 0F,
     @ColumnInfo(name = "poster_path")
     @SerializedName("poster_path")
-    val posterPath: String? = null,
+    override val posterPath: String? = null,
     @ColumnInfo(name = "original_language")
     @SerializedName("original_language")
-    val originalLanguage: String? = null,
+    override val originalLanguage: String? = "en",
     @SerializedName("original_title")
     val originalTitle: String? = null,
     @SerializedName("genre_ids")
-    val genreIds: IntArray = intArrayOf(),
+    override val genreIds: IntArray = intArrayOf(),
     @SerializedName("backdrop_path")
-    val backdropPath: String? = null,
+    override val backdropPath: String? = null,
     @SerializedName("adult")
     val adult: Boolean = false,
     @ColumnInfo(name = "overview")
     @SerializedName("overview")
-    val overview: String? = null,
+    override val overview: String? = null,
     @ColumnInfo(name = "release_date")
     @SerializedName("release_date")
     val releaseDate: String? = null,
@@ -50,30 +50,30 @@ data class Movie(
     val budget: Long = 0L,
     @ColumnInfo(name = "genres")
     @SerializedName("genres")
-    val genres: Array<Genre> = emptyArray(),
+    override val genres: Array<Genre> = emptyArray(),
     @SerializedName("homepage")
-    val homepage: String? = null,
+    override val homepage: String? = null,
     @SerializedName("imdb_id")
     val imdbId: String? = null,
     @SerializedName("production_companies")
-    val productionCompanies: Array<ProductionCompany> = emptyArray(),
+    override val productionCompanies: Array<ProductionCompany> = emptyArray(),
     @SerializedName("production_countries")
     val productionCountry: Array<ProductionCountry> = emptyArray(),
     @ColumnInfo(name = "revenue")
     @SerializedName("revenue")
-    val revenue: Long? = null,
+    val revenue: Long = 0L,
     @ColumnInfo(name = "runtime")
     @SerializedName("runtime")
     val runtime: Int? = null,
     @SerializedName("spoken_languages")
     val spokenLanguages: Array<SpokenLanguage> = emptyArray(),
     @SerializedName("status")
-    val status: String? = null,
+    override val status: String? = null,
     @SerializedName("tagline")
     val tagline: String? = null,
     @SerializedName("vote_count")
-    val voteCount: Long = 0L
-) : Parcelable {
+    override val voteCount: Long = 0L
+) : Catalogue(), Parcelable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other?.javaClass != javaClass) return false

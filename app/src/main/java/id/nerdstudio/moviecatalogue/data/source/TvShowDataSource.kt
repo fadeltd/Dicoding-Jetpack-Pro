@@ -6,7 +6,8 @@ import id.nerdstudio.moviecatalogue.data.entity.Crew
 import id.nerdstudio.moviecatalogue.data.entity.TvShow
 
 interface TvShowDataSource {
-    fun getAllTvShowRemote(): LiveData<List<TvShow>>
+
+    fun getAllTvShowsRemote(): LiveData<List<TvShow>>
 
     fun getTvShowCast(id: Long): LiveData<List<Cast>>
 

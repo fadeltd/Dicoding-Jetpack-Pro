@@ -6,8 +6,8 @@ import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
+import kotlinx.android.synthetic.main.fragment_main.*
 import id.nerdstudio.moviecatalogue.R
-import kotlinx.android.synthetic.main.activity_main.*
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.notNullValue
@@ -33,16 +33,6 @@ class MainActivityTest {
 
     @After
     fun tearDown() {
-    }
-
-    /**
-     * Menguji apakah viewpager bisa di geser
-     */
-    @Test
-    fun swipePage() {
-        onView(withId(R.id.view_pager)).check(matches(isDisplayed()))
-        onView(withId(R.id.view_pager)).perform(swipeLeft())
-        onView(withId(R.id.view_pager)).perform(swipeRight())
     }
 
     /**

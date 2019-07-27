@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.koushikdutta.ion.Ion
 import id.nerdstudio.moviecatalogue.R
+import id.nerdstudio.moviecatalogue.config.AppConfig.PosterType.W185
 import id.nerdstudio.moviecatalogue.config.AppConfig.getImageUrl
 import id.nerdstudio.moviecatalogue.data.entity.Cast
-import id.nerdstudio.moviecatalogue.config.AppConfig.PosterType.W185
 import kotlinx.android.synthetic.main.item_cast.view.*
 
 class CastAdapter(
@@ -33,7 +33,7 @@ class CastAdapter(
         fun bindItem(cast: Cast) {
             itemView.run {
                 cast.also {
-                    it.profilePath?.run{
+                    it.profilePath?.run {
                         val url = getImageUrl(this, W185)
                         Ion.with(context)
                             .load(url)

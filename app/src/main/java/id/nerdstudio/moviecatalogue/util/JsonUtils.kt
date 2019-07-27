@@ -4,7 +4,8 @@ import android.app.Application
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import id.nerdstudio.moviecatalogue.data.entity.Item
+import id.nerdstudio.moviecatalogue.data.entity.Movie
+import id.nerdstudio.moviecatalogue.data.entity.TvShow
 import id.nerdstudio.moviecatalogue.data.entity.Type
 import java.io.IOException
 
@@ -37,10 +38,11 @@ class JsonUtils(private val application: Application) {
         }
     }
 
-    fun loadItems(type: Type): List<Item> {
+    @Suppress("UNCHECKED_CAST")
+    fun <T> loadItems(type: Type): List<T> {
         val jsonFile = if (type == Type.MOVIE) "movies" else "tv_shows"
         val jsonString = readFile("$jsonFile.json")
-        var list = listOf<Item>()
+        var list = listOf<T>()
         jsonString?.run {
             val contentArray = JsonParser().parse(this).asJsonArray
             for (i in 0 until contentArray.size()) {
@@ -53,14 +55,27 @@ class JsonUtils(private val application: Application) {
                 val overview = item["overview"].asString
                 val releaseDate = item["release_date"].asString
 
-                list = list + Item(
-                    id,
-                    voteAverage,
-                    title,
-                    posterPath,
-                    overview,
-                    releaseDate
-                )
+                val catalogue =
+                    if (type == Type.MOVIE) {
+                        Movie(
+                            id = id,
+                            voteAverage = voteAverage,
+                            title = title,
+                            posterPath = posterPath,
+                            overview = overview,
+                            releaseDate = releaseDate
+                        )
+                    } else {
+                        TvShow(
+                            id = id,
+                            voteAverage = voteAverage,
+                            name = title,
+                            posterPath = posterPath,
+                            overview = overview,
+                            firstAirDate = releaseDate
+                        )
+                    }
+                list = list + (catalogue as T)
             }
         }
         return list

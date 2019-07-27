@@ -1,6 +1,5 @@
 package id.nerdstudio.moviecatalogue.data.source.favorite
 
-import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import id.nerdstudio.moviecatalogue.data.entity.Movie
 import id.nerdstudio.moviecatalogue.data.entity.TvShow

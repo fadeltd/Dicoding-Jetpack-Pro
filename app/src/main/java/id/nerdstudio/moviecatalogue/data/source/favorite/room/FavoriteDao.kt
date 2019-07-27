@@ -1,7 +1,6 @@
 package id.nerdstudio.moviecatalogue.data.source.favorite.room
 
 import androidx.annotation.WorkerThread
-import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import androidx.room.*
 import id.nerdstudio.moviecatalogue.data.entity.Movie
@@ -17,6 +16,8 @@ interface FavoriteDao {
     @get:WorkerThread
     @get:Query("SELECT * FROM favorite_tv_shows")
     val favoriteTvShowsPaged: DataSource.Factory<Int, TvShow>
+
+    // suspend fun countFavoriteMovie(id: Long): Int = countFavoriteMovieQuery(id)
 
     @Query("SELECT COUNT(id) FROM favorite_movies WHERE id = :id")
     fun countFavoriteMovie(id: Long): Int

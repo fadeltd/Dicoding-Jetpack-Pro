@@ -20,13 +20,12 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class ListFragmentTest {
+class MovieListFragmentTest {
     private lateinit var activity: SingleFragmentActivity
     @Rule
     @JvmField
     var activityRule = ActivityTestRule(SingleFragmentActivity::class.java)
-    private val movieFragment = ListFragment.newInstance(Type.MOVIE, PageType.HOME)
-    private val tvShowFragment = ListFragment.newInstance(Type.TV_SHOW, PageType.FAVORITE)
+    private val fragment = ListFragment.newInstance(Type.MOVIE, PageType.TEST)
 
     @Before
     fun setUp() {
@@ -42,17 +41,9 @@ class ListFragmentTest {
 
     @Test
     fun loadMovies() {
-        activityRule.activity.setFragment(movieFragment)
+        activityRule.activity.setFragment(fragment)
         onView(withId(R.id.recycler_view)).check(matches(isDisplayed()))
         onView(withId(R.id.recycler_view)).check(RecyclerViewItemCountAssertion(19))
-        onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
-    }
-
-    @Test
-    fun loadTvShows() {
-        activityRule.activity.setFragment(tvShowFragment)
-        onView(withId(R.id.recycler_view)).check(matches(isDisplayed()))
-        onView(withId(R.id.recycler_view)).check(RecyclerViewItemCountAssertion(20))
         onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
     }
 }

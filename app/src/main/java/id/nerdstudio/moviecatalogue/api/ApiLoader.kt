@@ -13,7 +13,7 @@ class ApiLoader {
     private var fragment: Fragment? = null
     private var builder: LoadBuilder<Builders.Any.B>
 
-    constructor(context: Context){
+    constructor(context: Context) {
         this.context = context
         builder = Ion.with(context)
     }
@@ -46,14 +46,18 @@ class ApiLoader {
         loader(url) { e, response ->
             onComplete?.invoke()
             if (e != null) {
-                onFailed?.invoke("${e.javaClass.simpleName} ${e.message}")
+                val message = "${e.javaClass.simpleName} ${e.message}"
+                onFailed?.invoke(message)
+                println(message)
             } else {
                 val code = response.headers?.code()
                 if (code == 200) {
                     val result = response.result
                     onResult?.invoke(result)
                 } else {
-                    onFailed?.invoke("HTTP Error Code $code")
+                    val message = "HTTP Error Code $code"
+                    onFailed?.invoke(message)
+                    println(message)
                 }
             }
         }
